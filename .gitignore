@@ -1,0 +1,11 @@
+# ignore buildout artefacts
+/.installed.cfg
+/.mr.developer.cfg
+/bin/
+/develop-eggs/
+/eggs/
+/parts/
+/src/
+
+# also ignore `local.cfg`
+/local.cfg
