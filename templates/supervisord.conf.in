@@ -1,0 +1,44 @@
+[unix_http_server]
+file=${buildout:directory}/var/supervisor.sock
+chmod=0600
+
+[supervisorctl]
+serverurl=unix://${buildout:directory}/var/supervisor.sock
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisord]
+logfile=${buildout:directory}/var/log/supervisord.log
+logfile_maxbytes=5MB
+logfile_backups=10
+loglevel=info
+pidfile=${buildout:directory}/var/supervisord.pid ;
+childlogdir=${buildout:directory}/var/log
+nodaemon=false              ; (start in foreground if true;default false)
+minfds=1024                 ; (min. avail startup file descriptors;default 1024)
+minprocs=200                ; (min. avail process descriptors;default 200)
+directory=%(here)s
+
+[program:ejabberd]
+command = ${buildout:bin-directory}/ejabberd
+startretries = 5
+redirect_stderr = true
+autostart = true
+autorestart = true
+priority = 100
+
+[program:nginx]
+command = ${buildout:directory}/parts/nginx/sbin/nginx -c ${buildout:directory}/parts/frontend/frontend.conf
+autostart= true
+autorestart = true
+redirect_stderr = true
+priority = 200
+
+[program:instance]
+command = ${buildout:bin-directory}/instance console
+startretries = 5
+redirect_stderr = true
+autostart= true
+autorestart = true
+priority = 300
