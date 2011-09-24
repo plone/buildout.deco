@@ -1,0 +1,109 @@
+{loglevel, 4}.
+
+{hosts, ["${xmppdomain}"]}.
+
+{listen,
+  [
+
+  {5222, ejabberd_c2s, [
+      {access, c2s},
+      {shaper, c2s_shaper},
+      {max_stanza_size, 65536}
+           ]},
+
+  {5269, ejabberd_s2s_in, [
+         {shaper, s2s_shaper},
+         {max_stanza_size, 131072}
+        ]},
+  
+  {{${collaboration_port}, {${collaboration_allowed_subnet}} }, ejabberd_service, [
+            {access, all}, 
+            {shaper_rule, fast},
+            {ip, {127, 0, 0, 1}},
+            {hosts, ["collaboration.${xmppdomain}"],
+             [{password, "${component_password}"}]
+            }
+           ]},
+
+  {5280, ejabberd_http, [
+       http_bind, 
+       web_admin
+      ]}
+
+ ]}.
+
+{auth_method, internal}.
+
+{shaper, normal, {maxrate, 1000}}.
+{shaper, fast, {maxrate, 50000}}.
+
+{host_config, "${xmppdomain}", [{acl, admin, {user, "${admin_userid}", "${xmppdomain}"}}]}.
+
+{acl, local, {user_regexp, ""}}.
+
+{access, max_user_sessions, [{10, all}]}.
+
+{access, local, [{allow, local}]}.
+
+{access, c2s, [{deny, blocked},
+         {allow, all}]}.
+
+{access, c2s_shaper, [{none, admin},
+          {normal, all}]}.
+
+{access, s2s_shaper, [{fast, all}]}.
+
+{access, announce, [{allow, admin}]}.
+
+{access, configure, [{allow, admin}]}.
+
+{access, muc_admin, [{allow, admin}]}.
+
+{access, muc, [{allow, all}]}.
+{access, muc_create, [{allow, local}]}.
+
+{access, register, [{allow, all}]}.
+
+{access, pubsub_createnode, [{allow, local}]}.
+
+
+{language, "en"}.
+
+{modules,
+ [
+  {mod_adhoc,    []},
+  {mod_announce, [{access, announce}]},
+  {mod_caps,     []}, 
+  {mod_configure,[]},
+  {mod_disco,    []},
+  {mod_http_bind,[]},
+  {mod_irc,      []},
+  {mod_last,     []},
+  {mod_muc,      [
+      {access, muc},
+      {access_create, muc_create},
+      {access_persistent, muc_create},
+      {access_admin, muc_admin}
+     ]},
+  {mod_offline,  []},
+  {mod_privacy,  []},
+  {mod_private,  []},
+  {mod_pubsub,   [
+      {access_createnode, pubsub_createnode},
+      {ignore_pep_from_offline, true},
+      {last_item_cache, false},
+      {nodetree, "dag"},
+      {plugins, ["dag", "flat", "hometree", "pep"]}
+     ]},
+  {mod_register, [
+      {welcome_message, {"Welcome!", 
+             "Welcome to ${xmppdomain} Jabber server."}},
+      {access, register}
+     ]},
+  {mod_roster,   []},
+  {mod_shared_roster,[]},
+  {mod_time,     []},
+  {mod_vcard,    []},
+  {mod_version,  []}
+ ]}.
+
