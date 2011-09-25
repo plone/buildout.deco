@@ -66,7 +66,7 @@ Next, you will also need to add a remote for the fork you want to merge from::
 
   git remote add USER git@github.com:USER/plone.app.PACKAGE
 
-Now you need to fetch both user's changes::
+Now you need to fetch the user's changes::
 
   git fetch USER
 
@@ -81,7 +81,7 @@ Finally, you can perform the actual merge:
 Setting up bash completion & prompt
 ===================================
 
-There are two optional 'goodies' that make working with git a lot easier: tab completion (for git commands, branch names and remotes) and a shell prompt that shows which branch you're currently working on. Highly recommended!
+There are two optional 'goodies' that make working with git a lot easier: **tab completion** (for git commands, branch names and remotes) and a **shell prompt** that shows which branch you're currently working on. Highly recommended!
 
 The easiest way to set this up is to download the following gist: https://gist.github.com/1240533 and save the two files it contains to your home directory.
 
