@@ -27,15 +27,32 @@ Notice, that you **do not need to fork the buildout repository itself**, only th
 
 Now you can work on the package(s), committing as you go along and push (to your fork) simply by issuing ``git push``.
 
-Once you're ready and want your changes to be merged into the plone repository, you should **issue a pull request**. Visit your package on github and click ``Pull request`` and fill out the form. Easy peasy!
+Eventhough you're now working on your own fork, it's still a good idea to work on a separate branch, like so::
+
+  git checkout -b NEW-FEATURE
+
+Once you're ready and want your changes to be merged into the plone repository, you should **issue a pull request**. Visit your package on github, switch to your NEW-FEATURE branch, click ``Pull request`` and fill out the form. Easy peasy!
 
 Update working packages with upstream changes
 =============================================
 
-  1. change into the package
-  2. ``git pull origin master``
+Before issuing a pull request it's a good idea to update your feature branch with the mainline first::
 
-This fetches the upstream changes and applies them to your currently checked out branch. You can then, optionally, push those updates to your fork with ``git push``.
+  git fetch origin
+  git merge origin/master --ff
+
+This fetches the upstream changes and applies them to your currently checked out branch (the ``--ff`` avoids creating a merge commit for this, of possible). You can then, optionally, push those updates to your fork with ``git push``.
+
+After you're done working on a package
+======================================
+
+Once your feature branch has been merged into the mainline you should switch your local checkout back to follow the plone repository. This way it's easier to keep it up-to-date (i.e. by using mr.developer)::
+
+  cd src/plone.app.PACKAGE
+  git checkout master
+  git pull
+
+If you don't do this, re-running buildout or issuing ``bin/develop up`` will ignore this package and you end up with stale versions (unless you constantly merge in upstream changes, which quickly becomes tedious.)
 
 Merging pull requests
 =====================
