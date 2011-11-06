@@ -4,6 +4,8 @@
 /bin/
 /develop-eggs/
 /eggs/
+/lib/
+/include/
 /parts/
 /src/
 /var/
