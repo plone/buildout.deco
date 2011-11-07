@@ -16,65 +16,77 @@ You now have all required packages checked out via git into ``src/``, but they a
 Working on packages
 ===================
 
-The policy is to perform all work on a personal fork. For example, if ``$USER`` wants to work on ``plone.app.PACKAGE``:
+The policy is to perform all work on a branch. Start by creating a branch of the deco buildout itself, naming it after the ticket you are working on, for example like so::
 
-  1. Visit ``PACKAGE`` on github (https://github.com/plone/plone.app.PACKAGE) and click the ''fork'' button.
-  2. ``cd src/plone.app.PACKAGE``
-  3. ``git remote add USER git@github.com:USER/plone.app.PACKAGE``
-  4. ``git push -u USER``
+  git checkout -b NEWUI-666-ruby-rewrite
 
-Notice, that you **do not need to fork the buildout repository itself**, only the package you want to change.
+Next, create feature branches for all packages you will work on. For example, if you will work on ``plone.app.cmsui`` do this::
 
-Now you can work on the package(s), committing as you go along and push (to your fork) simply by issuing ``git push``.
+  cd src/plone.app.cmsui
+  git checkout -b NEWUI-666-ruby-rewrite
 
-Eventhough you're now working on your own fork, it's still a good idea to work on a separate branch, like so::
+This creates a local feature branch. To push this to github (so that others can access it) you first need to configure a write-enabled remote, as the default remote (``origin``) points to a read-only version on github (this is done, because otherwise people who don't have write access to the plone repository couldn't check out the packages at all). By convention the write-enabled remote is called ``plone``, you can create it like so::
 
-  git checkout -b NEW-FEATURE
+  git remote add plone git@github.com:plone/plone.app.cmsui
 
-Once you're ready and want your changes to be merged into the plone repository, you should **issue a pull request**. Visit your package on github, switch to your NEW-FEATURE branch, click ``Pull request`` and fill out the form. Easy peasy!
+Now you can push to it. It's a good idea to do this immediately, eventhough it won't actually push any changes (because there aren't any yet), but the ``-u`` parameter will update the local branch to track the new remote by default. This means that during your work you can simply use ``git push`` and ``git pull`` without specifying the remote every time::
+
+  git push -u plone  
+
+Next you edit ``buildout.cfg`` to update the source definition. In this example you would look for the line::
+
+  plone.app.cmsui                   = git git://github.com/plone/plone.app.cmsui.git
+
+and change it to::
+
+  plone.app.cmsui                   = git git@github.com:plone/plone.app.cmsui.git branch=NEWUI-666-ruby-rewrite
+
+Notice, that you're not only changing the URL but also pointing mr.developer to use the feature branch.
+
+Finally, you need to do the same thing for the buildout itself::
+
+  cd ../..
+  git remote add plone git@github.com:plone/buildout.deco.git
+  git push -u
+
+.. note:: You only need to do this once per package.
+  For example, if you work on other tickets that also touch ``plone.app.cmsui``, you only need to create the branch and push it:: 
+
+    git checkout -b NEWUI-999-more-cowbell
+    git push -u plone
+
+Once you're ready and want your changes to be merged onto master, you should **issue a pull request**. Visit your package on github, switch to your NEW-FEATURE branch, click ``Pull request`` and fill out the form. Easy peasy!
+
+If your work encompasses multiple packages you should issue a pull request for each one and reference the others.
 
 Update working packages with upstream changes
 =============================================
 
 Before issuing a pull request it's a good idea to update your feature branch with the mainline first::
 
-  git fetch origin
-  git merge origin/master --ff
+  git fetch plone
+  git merge plone/master --ff
 
-This fetches the upstream changes and applies them to your currently checked out branch (the ``--ff`` avoids creating a merge commit for this, of possible). You can then, optionally, push those updates to your fork with ``git push``.
+This fetches the upstream changes and applies them to your currently checked out branch (the ``--ff`` avoids creating a merge commit for this, if possible, to not pollute your feature branch).
 
 After you're done working on a package
 ======================================
 
-Once your feature branch has been merged into the mainline you should switch your local checkout back to follow the plone repository. This way it's easier to keep it up-to-date (i.e. by using mr.developer)::
+Once your feature branch has been merged into the mainline you should switch your local buildout back to master::
 
-  cd src/plone.app.PACKAGE
   git checkout master
   git pull
+  bin/develop -rb
 
-If you don't do this, re-running buildout or issuing ``bin/develop up`` will ignore this package and you end up with stale versions (unless you constantly merge in upstream changes, which quickly becomes tedious.)
 
 Merging pull requests
 =====================
 
-The easiest way is to perform the merge TTW on github itself. If you want to perform this manually, you need to add the plone repository with a read-write url, like so::
-
-  cd src/plone.app.PACKAGE
-  git remote add plone git@github.com:plone/plone.app.PACKAGE
-
-Next, you will also need to add a remote for the fork you want to merge from::
-
-  git remote add USER git@github.com:USER/plone.app.PACKAGE
-
-Now you need to fetch the user's changes::
-
-  git fetch USER
-
-Finally, you can perform the actual merge:
+The easiest way is to perform the merge TTW on github itself. If you want to perform this manually, do this for each package:
 
   1. ``git checkout master`` *(merges are always performed on local checkouts of the master branch)*
   2. ``git pull`` *(make sure your local copy is up-to-date)*
-  3. ``git merge --no-ff USER/master`` *(merge in the changes from the fork, ``--no-ff`` makes sure that this merge is recorded in the history with a merge commit of its own, which helps keeping the history clean)*
+  3. ``git merge --no-ff plone/NEWUI-666-ruby-rewrite`` *(merge in the changes from the feature branch, ``--no-ff`` makes sure that this merge is recorded in the history with a merge commit of its own, which helps keeping the history clean)*
   4. ``git push plone`` *(if/once the merge was successful, push it back to github.)*
 
 
