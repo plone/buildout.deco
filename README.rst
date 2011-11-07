@@ -16,7 +16,7 @@ You now have all required packages checked out via git into ``src/``, but they a
 Working on packages
 ===================
 
-The policy is to perform all work on a branch. Start by creating a branch of the deco buildout itself, naming it after the ticket you are working on, for example like so::
+All tasks for this buildout are managed at `<http://projects.plone.org/>`_. The policy is to perform all work on a branch. Start by creating a branch of the buildout itself, naming it after the ticket you are working on, for example like so::
 
   git checkout -b NEWUI-666-ruby-rewrite
 
