@@ -1,6 +1,7 @@
-# ignore buildout artefacts
 /.installed.cfg
 /.mr.developer.cfg
+/tags
+
 /bin/
 /develop-eggs/
 /eggs/
