@@ -4,6 +4,7 @@
 
 /bin/
 /develop-eggs/
+/docs/_build/
 /eggs/
 /lib/
 /include/
