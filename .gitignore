@@ -1,5 +1,6 @@
 /.installed.cfg
 /.mr.developer.cfg
+/buildout.cfg
 /tags
 
 /bin/
@@ -11,11 +12,3 @@
 /parts/
 /src/
 /var/
-/.coverage
-/flake8.log
-/jshint-plone.app.deco.xml
-/jshint-plone.app.jquerytools.xml
-/jshint-plone.app.toolbar.xml
-
-# also ignore `local.cfg`
-/local.cfg
