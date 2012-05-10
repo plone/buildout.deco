@@ -1,5 +1,7 @@
 /.installed.cfg
 /.mr.developer.cfg
+/.project
+/.pydevproject
 /buildout.cfg
 /tags
 
