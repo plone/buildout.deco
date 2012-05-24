@@ -1,3 +1,7 @@
+Development buildout for `plone.app.deco`_ and `plone.app.toolbar`_.
+
+.. contents::
+
 Bootstrapping
 =============
 
@@ -6,29 +10,46 @@ Check out the buildout, bootstrap and run it, as usual::
     % git clone git@github.com:plone/buildout.deco.git
     % cd buildout.deco
     % cp buildout.cfg.in buildout.cfg
+
+Then uncomment one of the lines under ``extends``, more about them you can find
+at the section ``Projects``. Then run following commands::
+
     % python bootstrap.py 
     % bin/buildout
 
 You now have all required packages for development checked out via git into
 ``src/``.
 
+
 Running Tests
--------------
+=============
 
 .. warn:: TODO: need to write this section once we have tests running again.
 
-Subprojects / Integrations
---------------------------
 
-Since Deco is faily large project there are multiple subproject / integrations
-which Deco depends on or is planning to support them in future. You can run
-those projects separatly by tweaking buildout.cfg that you copied to the root
-of your buildout. Currently you can choose between: 
+Configurations
+==============
 
-- toolbar-only.cfg: only install toolbar
+In ``buildout.cfg`` you can select one of bellow described configurations:
 
-- chameleon.cfg: deco with chameleon as templating engine (TODO: need to add it
-  back)
+- ``toolbar-1.0.cfg``
 
-- collaboration.cfg: deco with support of jarn collaboration suite (TODO: need
-  to add it back again)
+  This is setup for `plone.app.toolbar`_ version 1.0, which replaces old green
+  editing toolbar with Twitter Bootstrap like toolbar. Although toolbar is
+  rendered inside iframe all links - when clicked - will open in top frame.
+
+- ``toolbar-2.0.cfg``
+
+  This is setup for `plone.app.toolbar`_ version 2.0, which builds uppon
+  version 1.0 and opens toolbar links inside overlay which is placed inside
+  iframe. This should give us separation of backend and frontend theming.
+
+- ``deco-1.0.cfg``
+
+  This is setup for `plone.app.deco`_ version 1.0 also known as Deco Lite.
+  Intention of Deco Lite is to bring Deco idea closer to current Plone 4 user
+  experience and not so redicaly change the way Plone is being used.
+
+
+.. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
+.. _`plone.app.deco`: https://github.com/plone/plone.app.deco
