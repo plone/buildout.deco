@@ -1,5 +1,5 @@
 [buildout]
 # only uncomment one
 extends =
-    deco.cfg
-#    toolbar-only.cfg
+#    deco.cfg
+    toolbar-only.cfg
