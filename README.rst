@@ -11,7 +11,7 @@ Check out the buildout, bootstrap and run it, as usual::
     % cd buildout.deco
     % cp buildout.cfg.in buildout.cfg
 
-Then uncomment one of the lines under ``extends``, more about them you can find
+Then uncomment one of the lines under ``extends``, you can find more about them 
 at the section ``Projects``. Then run following commands::
 
     % python bootstrap.py 
@@ -30,7 +30,7 @@ Running Tests
 Configurations
 ==============
 
-In ``buildout.cfg`` you can select one of bellow described configurations:
+In ``buildout.cfg`` you can select one of the configurations described below:
 
 - ``toolbar-1.0.cfg``
 
@@ -40,7 +40,7 @@ In ``buildout.cfg`` you can select one of bellow described configurations:
 
 - ``toolbar-2.0.cfg``
 
-  This is setup for `plone.app.toolbar`_ version 2.0, which builds uppon
+  This is setup for `plone.app.toolbar`_ version 2.0, which builds upon
   version 1.0 and opens toolbar links inside overlay which is placed inside
   iframe. This should give us separation of backend and frontend theming.
 
@@ -48,7 +48,7 @@ In ``buildout.cfg`` you can select one of bellow described configurations:
 
   This is setup for `plone.app.deco`_ version 1.0 also known as Deco Lite.
   Intention of Deco Lite is to bring Deco idea closer to current Plone 4 user
-  experience and not so redicaly change the way Plone is being used.
+  experience and not so radically change the way Plone is being used.
 
 
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
