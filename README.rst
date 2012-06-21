@@ -21,6 +21,15 @@ You now have all required packages for development checked out via git into
 ``src/``.
 
 
+Reportinga bugs 
+===============
+
+- toolbar/cmsui related bugs should be reported to `plone.app.toolbar github
+  issues`_
+
+- deco related related bugs should be reported to `plone.app.deco github
+  issues`_
+
 Running Tests
 =============
 
@@ -52,4 +61,6 @@ In ``buildout.cfg`` you can select one of the configurations described below:
 
 
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
+.. _`plone.app.toolbar github issues`: https://github.com/plone/plone.app.toolbar/issues
 .. _`plone.app.deco`: https://github.com/plone/plone.app.deco
+.. _`plone.app.deco github issues`: https://github.com/plone/plone.app.deco/issues
