@@ -5,3 +5,8 @@ extends =
 #    deco-2.0.cfg
 #    toolbar-1.0.cfg
 #    toolbar-2.0.cfg
+
+#[instance]
+#eggs +=
+#    iw.debug
+#    plone.reload
