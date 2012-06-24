@@ -33,7 +33,7 @@ Reportinga bugs
 Running Tests
 =============
 
-.. warn:: TODO: need to write this section once we have tests running again.
+TODO: need to write this section once we have tests running again.
 
 
 Configurations
@@ -58,6 +58,13 @@ In ``buildout.cfg`` you can select one of the configurations described below:
   This is setup for `plone.app.deco`_ version 1.0 also known as Deco Lite.
   Intention of Deco Lite is to bring Deco idea closer to current Plone 4 user
   experience and not so radically change the way Plone is being used.
+
+- ``deco-2.0.cfg``
+
+  This is setup for `plone.app.deco`_ version 2.0. Difference from 1.0 version
+  is that it includes `plone.app.toolbar`_ version 2.0 which includes CMSUI
+  functionality. This is also setup which you can use to develop both on
+  toolbar and deco.
 
 
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar

@@ -1,6 +1,7 @@
 [buildout]
 # only uncomment one
 extends =
-#    deco.cfg
+#    deco-1.0.cfg
+#    deco-2.0.cfg
 #    toolbar-1.0.cfg
 #    toolbar-2.0.cfg
