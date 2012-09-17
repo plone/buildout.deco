@@ -21,7 +21,7 @@ You now have all required packages for development checked out via git into
 ``src/``.
 
 
-Reportinga bugs 
+Reporting bugs 
 ===============
 
 - toolbar/cmsui related bugs should be reported to `plone.app.toolbar github
@@ -66,8 +66,14 @@ In ``buildout.cfg`` you can select one of the configurations described below:
   functionality. This is also setup which you can use to develop both on
   toolbar and deco.
 
+- ``pybot.cfg``
+
+  This is setup for performing acceptance testing on `plone.app.toolbar`_
+  version 2.0. It adds `plone.act`_ and the Robot Framework scripts.
+
 
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
 .. _`plone.app.toolbar github issues`: https://github.com/plone/plone.app.toolbar/issues
 .. _`plone.app.deco`: https://github.com/plone/plone.app.deco
 .. _`plone.app.deco github issues`: https://github.com/plone/plone.app.deco/issues
+.. _`plone.act`: https://github.com/plone/plone.act
