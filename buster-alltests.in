@@ -4,6 +4,9 @@ import sys
 import os
 import contextlib
 import subprocess
+import logging
+
+logger = logging.getLogger('buster-alltests')
 
 
 @contextlib.contextmanager
@@ -11,13 +14,16 @@ def run_server_and_slave():
     # From http://trodrigues.net/presentations/buster-ci/#/24
     server = subprocess.Popen([os.path.join('bin', 'buster-server'), '-v'],
                               stdout=subprocess.PIPE)
+    logger.info(
+        'Started buster.js server with pid %s' % server.pid)
 
     # Start Firefox slave
     slave = subprocess.Popen(
         '${:firefox-bin} ${:firefox-options} ${:url}',
         shell=True,
     )
-
+    logger.info(
+        'Started a browser slave with pid %s' % slave.pid)
 
     yield server, slave
 
@@ -47,6 +53,8 @@ def main():
         if output and not os.path.isdir(output):
             os.makedirs(output)
         for egg in eggs:
+            logger.info(
+                'Lookinf for buster.js tests in %s' % egg)
             egg_dir = os.path.join('src', egg)
             for dirpath, dirnames, filenames in os.walk(os.path.join(
                 'src', egg)):
@@ -58,6 +66,8 @@ def main():
                         result = dirpath[len(egg_dir):].strip('/').replace(
                             '/', '-') + '.xml'
                         stdout = open(os.path.join(output, result), 'w')
+                    logger.info(
+                        'Running buster.js tests in %s' % dirpath)
                     subprocess.call(
                         [os.path.join('bin', 'buster-test')] + options
                         + ['--config', os.path.join(dirpath, filename)],
@@ -65,4 +75,5 @@ def main():
                     break
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     main()
