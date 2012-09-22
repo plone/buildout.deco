@@ -1,5 +1,6 @@
 #!${buildout:executable}
 
+import sys
 import os
 import contextlib
 import subprocess
@@ -40,15 +41,25 @@ def main():
         options = [option.strip() for option in """${options}""".split()
                    if option.strip()]
         eggs = [egg.strip() for egg in """${eggs}""".split() if egg.strip()]
+        output = """${stdout}""".strip()
+        if output and not os.path.isdir(output):
+            os.makedirs(output)
         for egg in eggs:
+            egg_dir = os.path.join('src', egg)
             for dirpath, dirnames, filenames in os.walk(os.path.join(
                 'src', egg)):
                 for filename in filenames:
                     if filename != 'buster.js':
                         continue
+                    stdout = sys.stdout
+                    if output:
+                        result = dirpath[len(egg_dir):].strip('/').replace(
+                            '/', '-') + '.xml'
+                        stdout = open(os.path.join(output, result), 'w')
                     subprocess.call(
                         [os.path.join('bin', 'buster-test')] + options
-                        + ['--config', os.path.join(dirpath, filename)])
+                        + ['--config', os.path.join(dirpath, filename)],
+                        stdout=stdout)
                     break
 
 if __name__ == '__main__':
