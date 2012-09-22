@@ -13,9 +13,11 @@ def run_server_and_slave():
                               stdout=subprocess.PIPE)
 
     # Start Firefox slave
-    slave = subprocess.Popen([
-        'firefox', '-no-remote', 'http://localhost:1111/capture'
-        ])
+    slave = subprocess.Popen(
+        '${:firefox-bin} ${:firefox-options} ${:url}',
+        shell=True,
+    )
+
 
     yield server, slave
 
