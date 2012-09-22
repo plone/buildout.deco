@@ -37,11 +37,17 @@ def main():
                 'Server closed stdout without capturing a slave.')
     
         # Run the tests
-        test_dirs = """${buster-alltests:test-dirs}""".split()
-        for test_dir in test_dirs:
-            subprocess.call([
-                os.path.join('bin', 'buster-test'), '--config',
-                os.path.join(test_dir.strip(), 'buster.js')])
+        eggs = """${buster-alltests:eggs}""".split()
+        for egg in eggs:
+            for dirpath, dirnames, filenames in os.walk(
+                os.path.join('src', egg.strip())):
+                for filename in filenames:
+                    if filename != 'buster.js':
+                        continue
+                    subprocess.call([
+                        os.path.join('bin', 'buster-test'), '--config',
+                        os.path.join(dirpath, filename)])
+                    break
 
 if __name__ == '__main__':
     main()
