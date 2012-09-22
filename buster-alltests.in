@@ -1,0 +1,68 @@
+#!${buildout:executable}
+
+import sys
+import os
+import contextlib
+import subprocess
+
+
+@contextlib.contextmanager
+def run_server_and_slave():
+    # From http://trodrigues.net/presentations/buster-ci/#/24
+    server = subprocess.Popen([os.path.join('bin', 'buster-server'), '-v'],
+                              stdout=subprocess.PIPE)
+
+    # Start Firefox slave
+    slave = subprocess.Popen(
+        '${:firefox-bin} ${:firefox-options} ${:url}',
+        shell=True,
+    )
+
+
+    yield server, slave
+
+    # Shutdown the browser and server
+    slave.terminate()
+    slave.wait()
+    server.terminate()
+    server.wait()
+
+def main():
+    with run_server_and_slave() as (server, slave):
+        # Wait for slave to be captured
+        line = server.stdout.readline()
+        while line != '':
+            if line.startswith('Slave captured'):
+                break
+            line = server.stdout.readline()
+        else:
+            raise subprocess.CalledProcessError(
+                'Server closed stdout without capturing a slave.')
+    
+        # Run the tests
+        options = [option.strip() for option in """${options}""".split()
+                   if option.strip()]
+        eggs = [egg.strip() for egg in """${eggs}""".split() if egg.strip()]
+        output = """${stdout}""".strip()
+        if output and not os.path.isdir(output):
+            os.makedirs(output)
+        for egg in eggs:
+            egg_dir = os.path.join('src', egg)
+            for dirpath, dirnames, filenames in os.walk(os.path.join(
+                'src', egg)):
+                for filename in filenames:
+                    if filename != 'buster.js':
+                        continue
+                    stdout = sys.stdout
+                    if output:
+                        result = dirpath[len(egg_dir):].strip('/').replace(
+                            '/', '-') + '.xml'
+                        stdout = open(os.path.join(output, result), 'w')
+                    subprocess.call(
+                        [os.path.join('bin', 'buster-test')] + options
+                        + ['--config', os.path.join(dirpath, filename)],
+                        stdout=stdout)
+                    break
+
+if __name__ == '__main__':
+    main()
