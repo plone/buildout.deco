@@ -37,7 +37,7 @@ def main():
                 'Server closed stdout without capturing a slave.')
     
         # Run the tests
-        eggs = """${buster-alltests:eggs}""".split()
+        eggs = """${eggs}""".split()
         for egg in eggs:
             for dirpath, dirnames, filenames in os.walk(
                 os.path.join('src', egg.strip())):
