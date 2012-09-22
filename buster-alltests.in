@@ -37,6 +37,8 @@ def main():
                 'Server closed stdout without capturing a slave.')
     
         # Run the tests
+        options = [option.strip() for option in """${options}""".split()
+                   if option.strip()]
         eggs = [egg.strip() for egg in """${eggs}""".split() if egg.strip()]
         for egg in eggs:
             for dirpath, dirnames, filenames in os.walk(os.path.join(
@@ -44,9 +46,9 @@ def main():
                 for filename in filenames:
                     if filename != 'buster.js':
                         continue
-                    subprocess.call([
-                        os.path.join('bin', 'buster-test'), '--config',
-                        os.path.join(dirpath, filename)])
+                    subprocess.call(
+                        [os.path.join('bin', 'buster-test')] + options
+                        + ['--config', os.path.join(dirpath, filename)])
                     break
 
 if __name__ == '__main__':
