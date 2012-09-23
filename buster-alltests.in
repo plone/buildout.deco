@@ -31,8 +31,12 @@ def run_server_and_slave():
     # Shutdown the browser and server
     slave.terminate()
     slave.wait()
+    logger.info(
+        'Terminated browser slave with pid %s' % slave.pid)
     server.terminate()
     server.wait()
+    logger.info(
+        'Terminated buster.js server with pid %s' % server.pid)
 
 def main():
     with run_server_and_slave() as (server, slave):
