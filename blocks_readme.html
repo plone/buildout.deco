@@ -1,0 +1,267 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Blocks &mdash; Plone Deco</title>
+    
+    <link rel="stylesheet" href="_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Plone Deco" href="index.html" />
+    <link rel="next" title="Introduction to Tiles" href="tiles_readme.html" />
+    <link rel="prev" title="Introduction to Deco" href="deco_readme.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tiles_readme.html" title="Introduction to Tiles"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="deco_readme.html" title="Introduction to Deco"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-blocks">
+<h1>Introduction to Blocks<a class="headerlink" href="#introduction-to-blocks" title="Permalink to this headline">¶</a></h1>
+<p>This package implements the &#8216;blocks&#8217; rendering model, by providing several
+transform stages that hook into <tt class="docutils literal"><span class="pre">plone.transformchain</span></tt>.</p>
+<p>The rendering stages are:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>plone.app.blocks.parsexml (order 8000)</dt>
+<dd>Turns the response in a <tt class="docutils literal"><span class="pre">repoze.xmliter</span></tt> <tt class="docutils literal"><span class="pre">XMLSerializer</span></tt> object.
+This is then used by the subsequent stages. If the input is not HTML,
+the transformation is aborted.</dd>
+<dt>plone.app.blocks.mergepanels (order 8100)</dt>
+<dd>Looks up the site layout and executes the panel merge algorithm. Sets a
+request variable (&#8216;plone.app.blocks.merged&#8217;) to indicate that it has
+done its job.</dd>
+<dt>plone.app.blocks.tiles (order 8500)</dt>
+<dd>Resolve tiles and place them directly into the merged layout. This is the
+fallback for views that do not opt into ITilePageRendered.</dd>
+<dt>plone.app.blocks.esirender (order 8900)</dt>
+<dd>Only executed if the request key <tt class="docutils literal"><span class="pre">plone.app.blocks.esi</span></tt> is set and
+has a true value, as would be the case if any ESI-rendered tiles are
+included and ESI rendering is enabled globally. This step will serialise
+the response down to a string and perform some substitution to make ESI
+rendering work.</dd>
+</dl>
+</div></blockquote>
+<p>The package also registers the <tt class="docutils literal"><span class="pre">sitelayout</span></tt> <tt class="docutils literal"><span class="pre">plone.resource</span></tt> resource
+type, allowing site layouts to be created easily as static HTML files served
+from resource directories. The URL to a site layout is typically something
+like:</p>
+<div class="highlight-python"><pre>/++sitelayout++my.layout/site.html</pre>
+</div>
+<p>See <tt class="docutils literal"><span class="pre">plone.resource</span></tt> for more information about how to register resource
+directories. For site layouts, the <tt class="docutils literal"><span class="pre">type</span></tt> of the resource directory is
+<tt class="docutils literal"><span class="pre">sitelayout</span></tt>.</p>
+<p>It is possible to provide a manifest file that gives a title, description and
+alternative default file for a site layout HTML file in a resource directory.
+To create such a manifest, put a <tt class="docutils literal"><span class="pre">manifest.cfg</span></tt> file in the layout directory
+with the following structure:</p>
+<div class="highlight-python"><pre>[sitelayout]
+title = My layout title
+description = Some description
+file = some-html-file.html</pre>
+</div>
+<p>All keys are optional. The file defaults to <tt class="docutils literal"><span class="pre">site.html</span></tt>.</p>
+<p>A vocabulary factory called <tt class="docutils literal"><span class="pre">plone.availableSiteLayouts</span></tt> is registered to
+allow lookup of all registered site layouts.  The terms in this vocabulary
+use the URL as a value, the resource directory name as a token, and the
+title from the manifest (falling back on a sanitised version of the resource
+directory name) as the title.</p>
+<p>The current default site layout can be identified by the <tt class="docutils literal"><span class="pre">plone.registry</span></tt>
+key <tt class="docutils literal"><span class="pre">plone.defaultSiteLayout</span></tt>, which is set to <tt class="docutils literal"><span class="pre">None</span></tt> by default. To
+always use the current site default, use:</p>
+<div class="highlight-python"><pre>&lt;html data-layout="./@@default-site-layout"&gt;</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">&#64;&#64;default-site-layout</span></tt> view will render the current default site
+layout.</p>
+<p>It is possible for the default site layout to be overridden per section,
+by having parent objects provide or be adaptable to
+<tt class="docutils literal"><span class="pre">plone.app.blocks.layoutbehavior.ILayoutAware</span></tt>. As the module name implies,
+this interface can be used as a <tt class="docutils literal"><span class="pre">plone.behavior</span></tt> behavior, but it can also
+be implemented directly or used as a standard adapter.</p>
+<p>The <tt class="docutils literal"><span class="pre">ILayoutAware</span></tt> interface defines three properties:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">content</span></tt>, which contains the body of the page to be rendered</li>
+<li><tt class="docutils literal"><span class="pre">pageSiteLayout</span></tt>, which contains the path to the site layout to be used
+for the given page. It can be <tt class="docutils literal"><span class="pre">None</span></tt> if the default is to be used.</li>
+<li><tt class="docutils literal"><span class="pre">sectionSiteLayout</span></tt>, which contains the path to the site layout to be
+used for pages <em>underneath</em> the given page (but not for the page itself).
+Again, it can be <tt class="docutils literal"><span class="pre">None</span></tt> if the default is to be used.</li>
+</ul>
+<p>To make use of the page site layout, use the following:</p>
+<div class="highlight-python"><pre>&lt;html data-layout="./@@default-site-layout"&gt;</pre>
+</div>
+<p>See <tt class="docutils literal"><span class="pre">rendering.txt</span></tt> for detailed examples of how the processing is applied,
+and <tt class="docutils literal"><span class="pre">esi.txt</span></tt> for details about how Edge Side Includes can be supported.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="index.html"><img src="_static/logo.png" />
+</a></p>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deco_readme.html"
+                        title="previous chapter">Introduction to Deco</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tiles_readme.html"
+                        title="next chapter">Introduction to Tiles</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/blocks_readme.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tiles_readme.html" title="Introduction to Tiles"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="deco_readme.html" title="Introduction to Deco"
+             >previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+
+
+  </body>
+</html>

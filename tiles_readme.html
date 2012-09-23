@@ -1,0 +1,364 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Tiles &mdash; Plone Deco</title>
+    
+    <link rel="stylesheet" href="_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Plone Deco" href="index.html" />
+    <link rel="next" title="Introduction to Toolbar" href="toolbar_readme.html" />
+    <link rel="prev" title="Introduction to Blocks" href="blocks_readme.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="toolbar_readme.html" title="Introduction to Toolbar"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="blocks_readme.html" title="Introduction to Blocks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-tiles">
+<h1>Introduction to Tiles<a class="headerlink" href="#introduction-to-tiles" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">plone.tiles</span></tt> implements low-level, non-Plone/Zope2-specific support for
+creating &#8220;tiles&#8221; in the Deco layout system.</p>
+<p>For the purposes of this package, a tile is a browser view and an associated
+utility providing some metadata about that view. The metadata includes a title
+and description, an &#8216;add&#8217; permission and optionally a schema interface
+describing configurable aspects of the tile. The idea is that a UI (such as
+Deco) can present the user with a list of insertable tiles and optionally
+render a form to configure the tile upon insertion.</p>
+<p>A tile is inserted into a layout as a link:</p>
+<div class="highlight-python"><pre>&lt;link rel="tile" target="placeholder" href="./@@sample.tile/tile1?option1=value1" /&gt;</pre>
+</div>
+<p>The sub-path (<cite>tile1</cite> in this case) is used to set the tile <cite>id</cite> attribute.
+This allows the tile to know its unique id, and, in the case of persistent
+tiles, look up its data. <cite>sample.tile</cite> is the name of the browser view that
+implements the tile. This is made available as the <cite>__name__</cite> attribute. Other
+parameters may be turned into tile data, available under the <cite>data</cite> attribute,
+a dict, for regular tiles. For persistent tiles (those deriving from the
+<cite>PersistentTile</cite> base class), the data is fetched from annotations instead,
+based on the tile id.</p>
+<p>There are three interfaces describing tiles in this package:</p>
+<ul class="simple">
+<li><cite>IBasicTile</cite> is the low-level interface for tiles. It extends
+<cite>IBrowserView</cite> to describe the semantics of the <cite>__name__</cite> and  <cite>id</cite>
+attributes.</li>
+<li><cite>ITile</cite> describes a tile that can be configured with some data. The data
+is accessible via a dict called <cite>data</cite>. The default implementation of this
+interface, <cite>plone.tiles.Tile</cite>, will use the schema of the tile type and
+the query string (<cite>self.request.form</cite>) to construct that dictionary. This
+interface also describes an attribute <cite>url</cite>, which gives the canonical
+tile URL, including the id sub-path and any query string parameters. (Note
+that tiles also correctly implement <cite>IAbsoluteURL</cite>.)</li>
+<li><cite>IPersistentTile</cite> describes a tile that stores its configuration in
+object annotations, and is needed when configuration values cannot be
+encoded into a query string. The default implementation is in
+<cite>plone.tiles.PersistentTile</cite>. To make it possible to have several tiles
+of a given type on the same layout, the annotations are keyed by the
+tile <cite>__name__</cite>.</li>
+</ul>
+<p>In addition, tiles are described by <cite>ITileType</cite>, which contains attributes
+for the tile name, title, description, add permission and schema (if
+required).</p>
+<p>A properly configured tile, then, consists of a browser view providing
+<cite>IBasicTile</cite> or one of its derivatives, and a utility providing <cite>ITileType</cite>
+with the same name as the tile browser view. There is a convenience ZCML
+directive - <cite>&lt;plone:tile /&gt;</cite> - to register both of these components in one
+go.</p>
+<p>To support creation of appropriate tile links, <cite>plone.tiles.data</cite> contains two
+methods - <cite>encode()</cite> and <cite>decode()</cite> - to help turn a data dictionary into a
+query string and turn a <cite>request.form</cite> dict into a data dict that complies
+with a tile&#8217;s schema interface.</p>
+<div class="section" id="creating-a-simple-tile">
+<h2>Creating a Simple Tile<a class="headerlink" href="#creating-a-simple-tile" title="Permalink to this headline">¶</a></h2>
+<p>The most basic tile looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.tiles</span> <span class="kn">import</span> <span class="n">Tile</span>
+
+<span class="k">class</span> <span class="nc">MyTile</span><span class="p">(</span><span class="n">Tile</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello world&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>
+</pre></div>
+</div>
+<p>Note that the tile is expected to return a complete HTML document. This will
+be interpolated into the page output according to the following rules:</p>
+<ul class="simple">
+<li>The contents of the tile&#8217;s <tt class="docutils literal"><span class="pre">&lt;head</span> <span class="pre">/&gt;</span></tt> section is appended to the output
+document&#8217;s <tt class="docutils literal"><span class="pre">&lt;head</span> <span class="pre">/&gt;</span></tt> section.</li>
+<li>The contents of the tile&#8217;s <tt class="docutils literal"><span class="pre">&lt;body</span> <span class="pre">/&gt;</span></tt> section will replace the tile
+placeholder as indicated by the tile link.</li>
+</ul>
+<p>Note that this package does <em>not</em> provide these interpolations. For a Plone
+implementation of the interpolation algorithm, see <a class="reference external" href="http://pypi.python.org/pypi/plone.app.blocks">plone.app.blocks</a></p>
+<p>If you require a persistent tile, subclass <cite>plone.tiles.PersistentTile</cite>
+instead. You may also need a schema interface if you want a configurable
+transient or persistent tile.</p>
+<p>To register the tile, use ZCML like this:</p>
+<div class="highlight-python"><pre>&lt;configure xmlns:plone="http://namespaces.plone.org/plone"&gt;
+
+    &lt;plone:tile
+        name="sample.tile"
+
+        title="A title for the tile"
+        description="My tile's description"
+        add_permission="my.add.Permission"
+        schema=".interfaces.IMyTileSchema"
+
+        class=".mytile.MyTile"
+        permission="zope.Public"
+        for="*"
+        layer="*"
+        /&gt;
+
+&lt;/configure&gt;</pre>
+</div>
+<p>The first five attributes describe the tile by configuring an appropriate
+<cite>ITileType</cite> directive. The rest mimics the <cite>&lt;browser:page /&gt;</cite> directive,
+so you can specify a <cite>template</cite> file and omit the <cite>class</cite>, or use both a
+<cite>template</cite> and <cite>class</cite>.</p>
+<p>If you want to register a persistent tile with a custom schema, but a template
+only, you can do e.g.:</p>
+<div class="highlight-python"><pre>&lt;plone:tile
+    name="sample.persistenttile"
+    title="A title for the tile"
+    description="My tile's description"
+    add_permission="my.add.Permission"
+    schema=".interfaces.IMyTileSchema"
+    class="plone.tiles.PersistentTile"
+    template="mytile.pt"
+    permission="zope.Public"
+    for="*"
+    /&gt;</pre>
+</div>
+<p>If you want to override an existing tile, e.g. with a new layer or more
+specific context, you <em>must</em> omit the tile metadata (title, description, add
+permission or schema). If you include any metadata you will get a conflict
+error on Zope startup. This example shows how to use a different template
+for our tile:</p>
+<div class="highlight-python"><pre>&lt;plone:tile
+    name="sample.persistenttile"
+    template="override.pt"
+    permission="zope.Public"
+    for="*"
+    layer=".interfaces.IMyLayer"
+    /&gt;</pre>
+</div>
+<p>See <cite>tiles.rst</cite> and <cite>directives.rst</cite> for more details.</p>
+</div>
+<div class="section" id="plone-s-specific-implementation-of-tiles">
+<h2>Plone&#8217;s Specific Implementation of Tiles<a class="headerlink" href="#plone-s-specific-implementation-of-tiles" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">plone.app.tiles</span></tt> is Plone&#8217;s UI integration for <a class="reference external" href="http://pypi.python.org/pypi/plone.tiles">plone.tiles</a>.</p>
+<p>This package contains the following things:</p>
+<ul class="simple">
+<li>A view <tt class="docutils literal"><span class="pre">&#64;&#64;add-tile</span></tt>, and an associated form, which can be used to create a
+new tile based on the tile&#8217;s schema. For transient tiles, this merely
+redirects to a URL with an appropriate query string. For persistent tiles,
+it will also save the necessary data. This will fire an
+<tt class="docutils literal"><span class="pre">IObjectCreatedEvent</span></tt> as well as an <tt class="docutils literal"><span class="pre">IObjectAddedEvent</span></tt> for the newly
+created tile (a transient object) when successfully submitted. In the case
+of the <tt class="docutils literal"><span class="pre">IObjectAddedEvent</span></tt>, the <tt class="docutils literal"><span class="pre">newParent</span></tt> attribute will be the tile&#8217;s
+context, and the <tt class="docutils literal"><span class="pre">newName</span></tt> attribute will be the tile&#8217;s id.</li>
+<li>The <tt class="docutils literal"><span class="pre">&#64;&#64;add-tile</span></tt> view, when accessed directly, allows the user to choose
+from all available tiles (subject to the tile&#8217;s add permission) and
+redirects to the appropriate <tt class="docutils literal"><span class="pre">&#64;&#64;add-tile/&lt;tile-type&gt;</span></tt> URL to configure the
+tile.</li>
+<li>A view <tt class="docutils literal"><span class="pre">&#64;&#64;edit-tile</span></tt>, and an associated form, which can be used to edit a
+tile based on the tile&#8217;s schema. This will fire an <tt class="docutils literal"><span class="pre">IObjectModifiedEvent</span></tt>
+for the modified tile (a transient object) when successfully submitted.</li>
+<li>A view <tt class="docutils literal"><span class="pre">&#64;&#64;delete-tile</span></tt>, where the user may select a tile type, enter a tile
+id, and opt to clear out any persistent data for that tile. This can also be
+called by AJAX code given appropriate request parameters. This will fire an
+<tt class="docutils literal"><span class="pre">IObjectRemovedEvent</span></tt> for the removed tile (a transient object). The
+<tt class="docutils literal"><span class="pre">oldParent</span></tt> attribute will be the tile&#8217;s context, and the <tt class="docutils literal"><span class="pre">oldName</span></tt>
+attribute will be the tile&#8217;s id.</li>
+</ul>
+<p>The default add and edit forms should suffice for most use cases. You can use
+<a class="reference external" href="http://pypi.python.org/pypi/plone.autoform">plone.autoform</a> to configure
+alternative widgets, either by hand or via <a class="reference external" href="http://pypi.python.org/pypi/plone.directives.form">plone.directives.form</a>.</p>
+<p>If you need a custom form, you can register an add view as an adapter from
+<tt class="docutils literal"><span class="pre">(context,</span> <span class="pre">request,</span> <span class="pre">tileType)</span></tt>, where <tt class="docutils literal"><span class="pre">tileType</span></tt> is an instance providing
+<tt class="docutils literal"><span class="pre">plone.tiles.interfaces.ITileType</span></tt>.</p>
+<p>The actual integration of the various views is left up to other packages (such
+as the Deco editor).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="index.html"><img src="_static/logo.png" />
+</a></p>
+
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to Tiles</a><ul>
+<li><a class="reference internal" href="#creating-a-simple-tile">Creating a Simple Tile</a></li>
+<li><a class="reference internal" href="#plone-s-specific-implementation-of-tiles">Plone&#8217;s Specific Implementation of Tiles</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="blocks_readme.html"
+                        title="previous chapter">Introduction to Blocks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="toolbar_readme.html"
+                        title="next chapter">Introduction to Toolbar</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tiles_readme.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="toolbar_readme.html" title="Introduction to Toolbar"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="blocks_readme.html" title="Introduction to Blocks"
+             >previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+
+
+  </body>
+</html>

@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; Plone Deco</title>
+    <title>Introduction to Deco &mdash; Plone Deco</title>
     
     <link rel="stylesheet" href="_static/plone.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Plone Deco" href="index.html" />
-    <link rel="next" title="Complete API and advanced usage" href="api/index.html" />
+    <link rel="next" title="Introduction to Blocks" href="blocks_readme.html" />
     <link rel="prev" title="Advanced Usage" href="advanced.html" />
 <script language="javascript">
 //<![CDATA[
@@ -107,7 +107,7 @@ href="http://www.apple.com/safari/download/">Safari</a></p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="api/index.html" title="Complete API and advanced usage"
+          <a href="blocks_readme.html" title="Introduction to Blocks"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="advanced.html" title="Advanced Usage"
@@ -122,70 +122,17 @@ href="http://www.apple.com/safari/download/">Safari</a></p>
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="introduction-to-deco">
+<h1>Introduction to Deco<a class="headerlink" href="#introduction-to-deco" title="Permalink to this headline">¶</a></h1>
 <p>Deco is a graphical editor for Plone.</p>
-<div class="contents topic" id="table-of-contents">
-<p class="topic-title first">Table of contents</p>
-<ul class="simple">
-<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
-<li><a class="reference internal" href="#installation" id="id2">Installation</a></li>
-<li><a class="reference internal" href="#concepts" id="id3">Concepts</a><ul>
-<li><a class="reference internal" href="#deco" id="id4">Deco</a></li>
-<li><a class="reference internal" href="#the-deco-grid-system" id="id5">The Deco Grid System</a></li>
-<li><a class="reference internal" href="#blocks" id="id6">Blocks</a></li>
-<li><a class="reference internal" href="#site-layout" id="id7">Site layout</a></li>
-<li><a class="reference internal" href="#panels" id="id8">Panels</a></li>
-<li><a class="reference internal" href="#tiles" id="id9">Tiles</a></li>
-<li><a class="reference internal" href="#page-types-categories" id="id10">Page types (categories)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#faq" id="id11">FAQ</a><ul>
-<li><a class="reference internal" href="#how-do-i-theme-a-site-using-deco-and-blocks" id="id12">How do I theme a site using Deco and Blocks?</a></li>
-<li><a class="reference internal" href="#what-happens-to-viewlets" id="id13">What happens to viewlets?</a></li>
-<li><a class="reference internal" href="#what-happens-to-portlets" id="id14">What happens to portlets?</a></li>
-<li><a class="reference internal" href="#what-happens-to-content-types" id="id15">What happens to content types?</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#working-on-deco" id="id16">Working on Deco</a><ul>
-<li><a class="reference internal" href="#development-buildout" id="id17">Development buildout</a></li>
-<li><a class="reference internal" href="#source-code" id="id18">Source code</a></li>
-<li><a class="reference internal" href="#reporting-bugs" id="id19">Reporting bugs</a></li>
-<li><a class="reference internal" href="#i18n" id="id20">i18n</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="installation">
-<h1><a class="toc-backref" href="#id2">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>To install Deco, add <tt class="docutils literal"><span class="pre">plone.app.deco</span></tt> to your buildout and install the
-<tt class="docutils literal"><span class="pre">Deco</span></tt> extension profile into a Plone site. This will install:</p>
-<ul class="simple">
-<li><tt class="docutils literal"><span class="pre">plone.app.deco</span></tt>, the Deco editor and resources</li>
-<li><tt class="docutils literal"><span class="pre">plone.app.page</span></tt>, the base <tt class="docutils literal"><span class="pre">page</span></tt> content type and supporting logic
-to manage page types, site layouts and template page layouts.</li>
-<li><tt class="docutils literal"><span class="pre">plone.app.blocks</span></tt>, the Blocks rendering engine</li>
-<li><tt class="docutils literal"><span class="pre">plone.tiles</span></tt> and <tt class="docutils literal"><span class="pre">plone.app.tiles</span></tt>, which allow tiles to be created
-and managed.</li>
-<li><tt class="docutils literal"><span class="pre">plone.app.standardtiles</span></tt>, which contains tiles commonly used in Plone
-sites.</li>
-<li><tt class="docutils literal"><span class="pre">plone.app.cmsui</span></tt>, which provides the separation of Plone&#8217;s CMS UI
-into a separate, isolated toolbar.</li>
-</ul>
-<p>To test it, add an item of the newly installed <tt class="docutils literal"><span class="pre">Page</span></tt> type to your site.</p>
-<p>Note that Deco and <tt class="docutils literal"><span class="pre">plone.app.cmsui</span></tt> significantly affect the way a Plone
-site is used and operates. You should take care if installing on an existing
-site and test carefully.</p>
-</div>
 <div class="section" id="concepts">
-<h1><a class="toc-backref" href="#id3">Concepts</a><a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h1>
+<h2>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
 <p>Deco, Blocks and Tiles provider a simple, yet powerful way to manage the pages
 on your Plone website. At their core, they rely on semantic HTML and resources
 with valid, publishable URLs. Below, we will provide an overview of the core
 concepts that make up Deco, Blocks and Tiles.</p>
 <div class="section" id="deco">
-<h2><a class="toc-backref" href="#id4">Deco</a><a class="headerlink" href="#deco" title="Permalink to this headline">¶</a></h2>
+<h3>Deco<a class="headerlink" href="#deco" title="Permalink to this headline">¶</a></h3>
 <p>Deco is a visual editor for pages rendered using Blocks. It relies on the
 Deco Grid System to place tiles onto a page in an intuitive, WYSIWYG,
 drag-and-drop manner. Using Deco, it is easy to compose pages with complex,
@@ -194,7 +141,7 @@ balanced and visually appealing layouts.</p>
 the CMS UI toolbar.</p>
 </div>
 <div class="section" id="the-deco-grid-system">
-<h2><a class="toc-backref" href="#id5">The Deco Grid System</a><a class="headerlink" href="#the-deco-grid-system" title="Permalink to this headline">¶</a></h2>
+<h3>The Deco Grid System<a class="headerlink" href="#the-deco-grid-system" title="Permalink to this headline">¶</a></h3>
 <p>The Deco Grid System is a simple CSS grid framework. It uses robust,
 cross-browser CSS techniques to allow a page to be divided up into logical,
 proportionate rows and columns.</p>
@@ -205,7 +152,7 @@ proportions.</p>
 that is rendered.</p>
 </div>
 <div class="section" id="blocks">
-<h2><a class="toc-backref" href="#id6">Blocks</a><a class="headerlink" href="#blocks" title="Permalink to this headline">¶</a></h2>
+<h3>Blocks<a class="headerlink" href="#blocks" title="Permalink to this headline">¶</a></h3>
 <p>Blocks is a rendering algorithm based on HTML markup conventions. A page
 managed by Deco is stored as a simple HTML document representing the actual
 content of that page as a standalone, publishable resource devoid of any site
@@ -234,7 +181,7 @@ tiles).</p>
 <a class="reference external" href="http://pypi.python.org/pypi/plone.app.blocks">here</a>.</p>
 </div>
 <div class="section" id="site-layout">
-<h2><a class="toc-backref" href="#id7">Site layout</a><a class="headerlink" href="#site-layout" title="Permalink to this headline">¶</a></h2>
+<h3>Site layout<a class="headerlink" href="#site-layout" title="Permalink to this headline">¶</a></h3>
 <p>As alluded to, the site layout controls the global elements on the final,
 rendered page, such as global navigational aids, a search box, header/footer
 content and so forth.</p>
@@ -305,7 +252,7 @@ account.</p>
 page&#8217;s site layout, which should only apply to the specific view of that page.</p>
 </div>
 <div class="section" id="panels">
-<h2><a class="toc-backref" href="#id8">Panels</a><a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h2>
+<h3>Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h3>
 <p>Panels are the means by which content from the page layout and site layout
 get merged. A panel is a region on the site layout, identified by an <tt class="docutils literal"><span class="pre">id</span></tt>,
 that <em>may</em> be replaced by a corresponding region on the site.</p>
@@ -329,7 +276,7 @@ content.</p>
 this algorithm.</p>
 </div>
 <div class="section" id="tiles">
-<h2><a class="toc-backref" href="#id9">Tiles</a><a class="headerlink" href="#tiles" title="Permalink to this headline">¶</a></h2>
+<h3>Tiles<a class="headerlink" href="#tiles" title="Permalink to this headline">¶</a></h3>
 <p>Tiles represent the dynamic portions of a page. At its most basic level, a
 tile is simply an HTML document with a publishable URL.</p>
 <p>In practice, tiles are usually implemented as browser views deriving from the
@@ -422,7 +369,7 @@ and managing of cache headers.</p>
 and how they are incorporated into the page.</p>
 </div>
 <div class="section" id="page-types-categories">
-<h2><a class="toc-backref" href="#id10">Page types (categories)</a><a class="headerlink" href="#page-types-categories" title="Permalink to this headline">¶</a></h2>
+<h3>Page types (categories)<a class="headerlink" href="#page-types-categories" title="Permalink to this headline">¶</a></h3>
 <p>When Deco is installed, it adds a new type in <tt class="docutils literal"><span class="pre">portal_types</span></tt> called, simply,
 <tt class="docutils literal"><span class="pre">page</span></tt>. This is a Dexterity content type that uses the <tt class="docutils literal"><span class="pre">ILayoutAware</span></tt>
 behaviour to manage page- and section-specific site layouts as well as the
@@ -445,193 +392,6 @@ layout based on the contents of the current page.</p>
 the <em>Deco</em> control panel.</p>
 </div>
 </div>
-<div class="section" id="faq">
-<h1><a class="toc-backref" href="#id11">FAQ</a><a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
-<p>Below, we will attempt to answer some frequently asked questions about Deco,
-Blocks and Tiles.</p>
-<div class="section" id="how-do-i-theme-a-site-using-deco-and-blocks">
-<h2><a class="toc-backref" href="#id12">How do I theme a site using Deco and Blocks?</a><a class="headerlink" href="#how-do-i-theme-a-site-using-deco-and-blocks" title="Permalink to this headline">¶</a></h2>
-<p>You may have realised that it is possible to &#8220;theme&#8221; a site using site
-layouts, by placing global elements and branding on the site layout itself.</p>
-<p>This may be appropriate for simple sites with minimal branding needs: as a
-rule of thumb, if you think you could construct your branding with the Deco
-visual editor only,  using site layouts to contain your visual identity may
-be appropriate.</p>
-<p>There are some caveats, however:</p>
-<ul class="simple">
-<li>It is best to keep your site layouts focused on semantic layout, e.g. using
-names such as &#8220;Article&#8221; or &#8220;Landing page&#8221;. If content authors choose site
-layouts for their pages and sections based mainly on visual identity, it
-will be harder to reuse content or rebrand the site later.</li>
-<li>You may choose to let content authors or site administrators have the
-permission to create new site layouts or edit the contents of site layouts
-(e.g. to manage global elements such as advertisement or notifications). If
-the site layout is complex, it may be difficult to maintain visual
-consistency across multiple site layouts.</li>
-</ul>
-<p>Hence, we would generally recommend that you keep your site layouts as
-semantic and simple as possible, and apply a visual identity using <a class="reference external" href="http://diazo.org">Diazo</a>
-and <a class="reference external" href="http://pypi.python.org/pypi/plone.app.theming">plone.app.theming</a>. Deco and Diazo are designed to work together, with
-Deco focused on site layout as it pertains to content management and editing,
-and Diazo focused on branding and theming.</p>
-</div>
-<div class="section" id="what-happens-to-viewlets">
-<h2><a class="toc-backref" href="#id13">What happens to viewlets?</a><a class="headerlink" href="#what-happens-to-viewlets" title="Permalink to this headline">¶</a></h2>
-<p>In Plone 3 and 4, viewlets are used for two purposes:</p>
-<ol class="arabic simple">
-<li>As a means of breaking the main site layout templates up into smaller
-chunks that can be independently managed.</li>
-<li>As a means for third-party add-ons to inject bits of markup into the page
-at predefined locations (e.g. &#8220;above content&#8221; or &#8220;below content&#8221;) without
-the need to customise global page templates.</li>
-</ol>
-<p>The first of these is problematic in a some ways. For example, it relies on a
-mixture of global registration (ZCML) and local, persistent configuration (the
-<tt class="docutils literal"><span class="pre">viewlets.xml</span></tt> GenericSetup import step) to control what is shown and in
-what order. It also makes it difficult to understand how the final page will
-look by inspecting <tt class="docutils literal"><span class="pre">main_template</span></tt>.</p>
-<p>Hence, this pattern of using viewlets is superseded by tiles. Tiles are simply
-placed into the relevant site layout. The ordering of tiles is controlled by
-the ordering of the relevant tile placeholders. As a bonus, tiles are easier
-to write than viewlets and can have associated configuration.</p>
-<p>The second use of viewlets is entirely legitimate, of course. Here, specific
-ordering should matter less (a third-party add-on cannot know which other
-third-party add-ons may be adding content in the same viewlet managers), and
-the focus becomes on semantic or semi-semantic locations on the page in which
-viewlets can be inserted. This is indeed closer to the original purpose of
-viewlets.</p>
-<p>For this pattern, there is a tile called
-<tt class="docutils literal"><span class="pre">&#64;&#64;plone.app.standardtiles.viewletmanager</span></tt>, which looks up and renders a
-viewlet manager. For example, the default sitelayout in Deco contains:</p>
-<div class="highlight-python"><pre>&lt;link  rel="tile" target="abovecontent-viewlets"
-    href="./@@plone.app.standardtiles.viewletmanager/above-content?manager=plone.abovecontent" /&gt;</pre>
-</div>
-<p>Note that the tile takes a parameter, <tt class="docutils literal"><span class="pre">manager</span></tt>, giving the name of the
-viewlet manager to look up and render. For viewlet managers rendered in the
-head of the page, we use:</p>
-<div class="highlight-python"><pre>&lt;link  rel="tile"
-    href="./@@plone.app.standardtiles.viewletmanager?manager=plone.htmlhead&amp;amp;section=head" /&gt;</pre>
-</div>
-<p>This ensures the contents of the viewlet manager are rendered in the
-<tt class="docutils literal"><span class="pre">&lt;head</span> <span class="pre">/&gt;</span></tt> of the tile, not the <tt class="docutils literal"><span class="pre">&lt;body</span> <span class="pre">/&gt;</span></tt>.</p>
-</div>
-<div class="section" id="what-happens-to-portlets">
-<h2><a class="toc-backref" href="#id14">What happens to portlets?</a><a class="headerlink" href="#what-happens-to-portlets" title="Permalink to this headline">¶</a></h2>
-<p>Portlets should likely be replaced by tiles. This will require some
-refactoring, as tiles are considerably simpler than portlets. This simplicity
-is a good thing though: tiles are faster and easier to write and much easier
-to understand.</p>
-<p>There is a conceptual difference too: Instead of having portlet managers that
-acquire and block portlets from the content hierarchy, the sort of content and
-dynamic behaviour that is managed in portlets in Plone 3 and 4 would instead
-be modelled by tiles placed directly onto the appropriate site layout(s).</p>
-<p>If the situation warrants, the relevant tile could of course use some more
-abstraction e.g. to model inheritance of settings. In most cases, this should
-not be necessary, though: websites generally have only a handful of different
-layouts, which in Plone 4 sometimes require an elaborate dance of portlet
-assignment, inheritance and blocking.</p>
-<p>To users, there is really no distinction between app tiles used for things
-like a navigation tree or a listing of news items (both of which are portlets
-in Plone 4) and app tiles used for things like a poll or content listing on
-a page. With Deco-managed site layouts, tiles can be placed onto the layout
-wherever they are most appropriate, and there is no need to write ZCML and/or
-Python code to insert another portlet manager if you don&#8217;t have a three-column
-layout.</p>
-<p>There is, however, a &#8220;legacy&#8221; tile that can be used to render a the contents
-of a portlet manager, thus allowing existing portlets to be managed and
-rendered in the same way they are in Plone 4. For example:</p>
-<div class="highlight-python"><pre>&lt;link  rel="tile" target="left-portlets"
-    href="./@@plone.app.standardtiles.portletmanager/left-portlets?manager=plone.leftcolumn" /&gt;</pre>
-</div>
-</div>
-<div class="section" id="what-happens-to-content-types">
-<h2><a class="toc-backref" href="#id15">What happens to content types?</a><a class="headerlink" href="#what-happens-to-content-types" title="Permalink to this headline">¶</a></h2>
-<p>Traditionally, achieving a particular non-trivial layout in a way that is
-consistent site wide has required the creation of a new content type. With
-Deco and page categories, many existing types can be thought of simply as
-pages with different layouts.</p>
-<p>For example:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="19%" />
-<col width="81%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Plone 4 type</th>
-<th class="head">Deco equivalent</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Page</td>
-<td>The standard page type with a simple default layout.</td>
-</tr>
-<tr class="row-odd"><td>Event</td>
-<td>A new category of page with a template page layout that
-includes the relevant metadata field tiles such as start
-and end dates.</td>
-</tr>
-<tr class="row-even"><td>News Item</td>
-<td>A new category of page with a layout that places a lead
-image underneath the title.</td>
-</tr>
-<tr class="row-odd"><td>Folder</td>
-<td>Pages can have sub-pages. This replaces the insanely
-confusing (to most users) &#8220;default page&#8221; concept. If you
-need a folder listing, you can place a folder listing
-tile on the page.</td>
-</tr>
-<tr class="row-even"><td>Collection</td>
-<td>The collections query builder is a tile: hence, a
-Collection becomes simply a page with an instance of
-that tile on it.</td>
-</tr>
-</tbody>
-</table>
-<p>Of course, page categories are treated as first-class content types everywhere
-in Plone, so they can used in catalog queries, for example.</p>
-<p>The remains are:</p>
-<ul class="simple">
-<li><em>Page</em> and its variants</li>
-<li><em>File</em>, which should handle both files and images, making image operations
-and behaviours available when dealing with a binary of an image MIME type.</li>
-<li>Any custom, forms-driven types: Dexterity (and in particular its
-through-the-web) types creation facilities provide an excellent way to model
-organisation-specific data structures with forms-driven data entry as the
-primary content management paradigm. Such types can have view templates that
-specify a site layout, or simply use the standard <tt class="docutils literal"><span class="pre">main_template</span></tt> macros,
-which in turn will use the default (global or section-specific) site layout.</li>
-</ul>
-</div>
-</div>
-<div class="section" id="working-on-deco">
-<h1><a class="toc-backref" href="#id16">Working on Deco</a><a class="headerlink" href="#working-on-deco" title="Permalink to this headline">¶</a></h1>
-<p>Deco is still work in progress. If you want to help finish it, there are
-some pointers below for how to get involved.</p>
-<div class="section" id="development-buildout">
-<h2><a class="toc-backref" href="#id17">Development buildout</a><a class="headerlink" href="#development-buildout" title="Permalink to this headline">¶</a></h2>
-<p>There is a development buildout at
-<a class="reference external" href="https://svn.plone.org/svn/plone/plone.app.deco/buildouts/dev">https://svn.plone.org/svn/plone/plone.app.deco/buildouts/dev</a>.</p>
-</div>
-<div class="section" id="source-code">
-<h2><a class="toc-backref" href="#id18">Source code</a><a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h2>
-<p>The code for <tt class="docutils literal"><span class="pre">plone.app.deco</span></tt>, <tt class="docutils literal"><span class="pre">plone.app.page</span></tt>, and the other packages
-all live in the primary Plone source code repository at
-<a class="reference external" href="https://svn.plone.org/svn/plone/">https://svn.plone.org/svn/plone/</a>. Note that you must have signed a Plone
-Contributor Agreement before you can have access to commit to this repository.</p>
-</div>
-<div class="section" id="reporting-bugs">
-<h2><a class="toc-backref" href="#id19">Reporting bugs</a><a class="headerlink" href="#reporting-bugs" title="Permalink to this headline">¶</a></h2>
-<p>Please report bugs in JIRA until Deco is part of Plone. The JIRA project for
-Deco is at: <a class="reference external" href="http://projects.plone.org/browse/DC">http://projects.plone.org/browse/DC</a></p>
-</div>
-<div class="section" id="i18n">
-<h2><a class="toc-backref" href="#id20">i18n</a><a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h2>
-<p>All message strings should be in the Plone domain. If you need to add any
-Plone 5 packages to extract messages, you only have to add in to plone5
-variable in experimental/i18n.cfg and run the buildout. You can do bin/i18n
-plone5 at any moment and if there is no error you can commit the changes from
-src/plone.app.locales/plone/app/locales/locales-future</p>
-</div>
 </div>
 
 
@@ -645,8 +405,7 @@ src/plone.app.locales/plone/app/locales/locales-future</p>
 
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#">Introduction to Deco</a><ul>
 <li><a class="reference internal" href="#concepts">Concepts</a><ul>
 <li><a class="reference internal" href="#deco">Deco</a></li>
 <li><a class="reference internal" href="#the-deco-grid-system">The Deco Grid System</a></li>
@@ -657,18 +416,6 @@ src/plone.app.locales/plone/app/locales/locales-future</p>
 <li><a class="reference internal" href="#page-types-categories">Page types (categories)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#faq">FAQ</a><ul>
-<li><a class="reference internal" href="#how-do-i-theme-a-site-using-deco-and-blocks">How do I theme a site using Deco and Blocks?</a></li>
-<li><a class="reference internal" href="#what-happens-to-viewlets">What happens to viewlets?</a></li>
-<li><a class="reference internal" href="#what-happens-to-portlets">What happens to portlets?</a></li>
-<li><a class="reference internal" href="#what-happens-to-content-types">What happens to content types?</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#working-on-deco">Working on Deco</a><ul>
-<li><a class="reference internal" href="#development-buildout">Development buildout</a></li>
-<li><a class="reference internal" href="#source-code">Source code</a></li>
-<li><a class="reference internal" href="#reporting-bugs">Reporting bugs</a></li>
-<li><a class="reference internal" href="#i18n">i18n</a></li>
 </ul>
 </li>
 </ul>
@@ -677,8 +424,8 @@ src/plone.app.locales/plone/app/locales/locales-future</p>
   <p class="topless"><a href="advanced.html"
                         title="previous chapter">Advanced Usage</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api/index.html"
-                        title="next chapter">Complete API and advanced usage</a></p>
+  <p class="topless"><a href="blocks_readme.html"
+                        title="next chapter">Introduction to Blocks</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/deco_readme.txt"
@@ -711,7 +458,7 @@ src/plone.app.locales/plone/app/locales/locales-future</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="api/index.html" title="Complete API and advanced usage"
+          <a href="blocks_readme.html" title="Introduction to Blocks"
              >next</a> |</li>
         <li class="right" >
           <a href="advanced.html" title="Advanced Usage"

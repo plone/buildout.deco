@@ -1,0 +1,275 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Toolbar &mdash; Plone Deco</title>
+    
+    <link rel="stylesheet" href="_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Plone Deco" href="index.html" />
+    <link rel="next" title="Complete API and advanced usage" href="api/index.html" />
+    <link rel="prev" title="Introduction to Tiles" href="tiles_readme.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="Complete API and advanced usage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tiles_readme.html" title="Introduction to Tiles"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-toolbar">
+<h1>Introduction to Toolbar<a class="headerlink" href="#introduction-to-toolbar" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">plone.app.toolbar</span></tt> installs a new content editing toolbar for Plone.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>To install toolbar drop following lines to your buildout.cfg:</p>
+<div class="highlight-python"><pre>[instance]
+eggs =
+    ...
+    plone.app.toolbar
+
+[versions]
+plone.app.jquery = 1.7.2
+plone.app.jquerytools = 1.4
+plone.tiles = 1.1
+plone.app.toolbar = 1.1</pre>
+</div>
+<p>Bellow version pins are for Plone version 4.2 or higher.</p>
+<p>Make sure you install the &#8220;Plone Toolbar&#8221; profile when creating your Plone site
+or include <tt class="docutils literal"><span class="pre">plone.app.toolbar:default</span></tt> profile in your <tt class="docutils literal"><span class="pre">metadata.xml</span></tt>..</p>
+<p>To start developing plone.app.toolbar you can find buildout at
+<tt class="docutils literal"><span class="pre">buildout.deco</span></tt> repository.:</p>
+<div class="highlight-python"><pre>https://github.com/plone/buildout.deco/blob/master/toolbar-2.0.cfg</pre>
+</div>
+</div>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>Registers toolbar tile which creates toolbar html on every page in twitter
+bootstrap structure and is hidden by default. Toolbar tile also lists resources
+from <tt class="docutils literal"><span class="pre">toolbar</span></tt> skin in <tt class="docutils literal"><span class="pre">data-iframe-resources</span></tt> attribute of top element.</p>
+<div class="highlight-python"><pre>&lt;div style="display: none;"
+     data-iframe="example"
+     data-iframe-resources="resource1.js;resource2.css;..."&gt;
+  &lt;div class="navbar"&gt;
+    ...
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</div>
+<p>Elements with <tt class="docutils literal"><span class="pre">data-iframe</span></tt> attribute are picked by <a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/resources/src/iframed.js">iframed.js</a> and inserts
+resources found in <tt class="docutils literal"><span class="pre">data-iframe-resources</span></tt> attribute. <cite>iframed.js</cite> script
+also takes care that dropdown in toolbar which goes outside iframe area
+stretches it in transparent way so that user doesn&#8217;t even notice it.</p>
+<p>Same transparent stretching of iframe is used when overlay is opened. This is
+done by <a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/resources/src/plone.overlay.js">plone.overlay.js</a> script. Example of how to open overlay when user
+click on <tt class="docutils literal"><span class="pre">Edit</span></tt> action in toolbar would be:</p>
+<div class="highlight-python"><pre>$('#plone-toolbar ul.nav &gt; li#plone-action-edit &gt; a').ploneOverlay({
+  after_load: function(overlay) {
+    $.plone.cmsui.bootstrapOverlayTransform(overlay.el, overlay.loaded_data);
+  }
+});</pre>
+</div>
+<p>More examples of this can be found in <a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/resources/src/plone.cmsui.js">plone.cmsui.js</a> script.</p>
+<p>Since in current Plone we&#8217;re not using <a class="reference external" href="https://github.com/plone/plone.app.blocks">plone.app.blocks</a> to render tiles we
+provide plone toolbar viewlet which renders toolbar tile. This is done by
+<a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/bbb.zcml">bbb</a> code that also makes sure that <tt class="docutils literal"><span class="pre">plone.app.toolbar</span></tt> is nicely
+integrated into current Plone, eg: hidding old green edit bar, ...</p>
+</div>
+<div class="section" id="diazo-rules">
+<h2>Diazo rules<a class="headerlink" href="#diazo-rules" title="Permalink to this headline">¶</a></h2>
+<p>First we need to copy toolbar&#8217;s html code, which will be picked by
+<a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/resources/src/iframed.js">iframed.js</a>:</p>
+<div class="highlight-python"><pre>&lt;append theme="/html/body"
+    content="//div[@data-iframe='toolbar']" /&gt;</pre>
+</div>
+<p>Then in case we are not copying all resources from Plone to theme we have to
+include <a class="reference external" href="https://github.com/plone/plone.app.toolbar/blob/master/plone/app/toolbar/resources/src/iframed.js">iframed.js</a>:</p>
+<div class="highlight-python"><pre>&lt;append theme="/html/head"&gt;
+    &lt;script type="text/javascript"
+        src="++resource++plone.app.toolbar/src/iframed.js"&gt;&lt;/script&gt;
+&lt;/append&gt;</pre>
+</div>
+<p>Above 2 rules should be enought so that your theme will support
+<a class="reference external" href="https://github.com/plone/plone.app.toolbar">plone.app.toolbar</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="index.html"><img src="_static/logo.png" />
+</a></p>
+
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to Toolbar</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#diazo-rules">Diazo rules</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tiles_readme.html"
+                        title="previous chapter">Introduction to Tiles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/index.html"
+                        title="next chapter">Complete API and advanced usage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/toolbar_readme.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="Complete API and advanced usage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tiles_readme.html" title="Introduction to Tiles"
+             >previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+
+
+  </body>
+</html>

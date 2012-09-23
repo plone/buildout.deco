@@ -1,0 +1,380 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Frequently Asked Questions &mdash; Plone Deco</title>
+    
+    <link rel="stylesheet" href="_static/plone.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Plone Deco" href="index.html" />
+    <link rel="next" title="Advanced Usage" href="advanced.html" />
+    <link rel="prev" title="Working on Deco" href="working_on_deco.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
+  </head>
+  <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="advanced.html" title="Advanced Usage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="working_on_deco.html" title="Working on Deco"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<p>Below, we will attempt to answer some frequently asked questions about Deco,
+Blocks and Tiles.</p>
+<div class="section" id="how-do-i-theme-a-site-using-deco-and-blocks">
+<h2>How do I theme a site using Deco and Blocks?<a class="headerlink" href="#how-do-i-theme-a-site-using-deco-and-blocks" title="Permalink to this headline">¶</a></h2>
+<p>You may have realised that it is possible to &#8220;theme&#8221; a site using site
+layouts, by placing global elements and branding on the site layout itself.</p>
+<p>This may be appropriate for simple sites with minimal branding needs: as a
+rule of thumb, if you think you could construct your branding with the Deco
+visual editor only,  using site layouts to contain your visual identity may
+be appropriate.</p>
+<p>There are some caveats, however:</p>
+<ul class="simple">
+<li>It is best to keep your site layouts focused on semantic layout, e.g. using
+names such as &#8220;Article&#8221; or &#8220;Landing page&#8221;. If content authors choose site
+layouts for their pages and sections based mainly on visual identity, it
+will be harder to reuse content or rebrand the site later.</li>
+<li>You may choose to let content authors or site administrators have the
+permission to create new site layouts or edit the contents of site layouts
+(e.g. to manage global elements such as advertisement or notifications). If
+the site layout is complex, it may be difficult to maintain visual
+consistency across multiple site layouts.</li>
+</ul>
+<p>Hence, we would generally recommend that you keep your site layouts as
+semantic and simple as possible, and apply a visual identity using <a href="#id1"><span class="problematic" id="id2">`Diazo`_</span></a>
+and <a href="#id3"><span class="problematic" id="id4">`plone.app.theming`_</span></a>. Deco and Diazo are designed to work together, with
+Deco focused on site layout as it pertains to content management and editing,
+and Diazo focused on branding and theming.</p>
+</div>
+<div class="section" id="what-happens-to-viewlets">
+<h2>What happens to viewlets?<a class="headerlink" href="#what-happens-to-viewlets" title="Permalink to this headline">¶</a></h2>
+<p>In Plone 3 and 4, viewlets are used for two purposes:</p>
+<ol class="arabic simple">
+<li>As a means of breaking the main site layout templates up into smaller
+chunks that can be independently managed.</li>
+<li>As a means for third-party add-ons to inject bits of markup into the page
+at predefined locations (e.g. &#8220;above content&#8221; or &#8220;below content&#8221;) without
+the need to customise global page templates.</li>
+</ol>
+<p>The first of these is problematic in a some ways. For example, it relies on a
+mixture of global registration (ZCML) and local, persistent configuration (the
+<tt class="docutils literal"><span class="pre">viewlets.xml</span></tt> GenericSetup import step) to control what is shown and in
+what order. It also makes it difficult to understand how the final page will
+look by inspecting <tt class="docutils literal"><span class="pre">main_template</span></tt>.</p>
+<p>Hence, this pattern of using viewlets is superseded by tiles. Tiles are simply
+placed into the relevant site layout. The ordering of tiles is controlled by
+the ordering of the relevant tile placeholders. As a bonus, tiles are easier
+to write than viewlets and can have associated configuration.</p>
+<p>The second use of viewlets is entirely legitimate, of course. Here, specific
+ordering should matter less (a third-party add-on cannot know which other
+third-party add-ons may be adding content in the same viewlet managers), and
+the focus becomes on semantic or semi-semantic locations on the page in which
+viewlets can be inserted. This is indeed closer to the original purpose of
+viewlets.</p>
+<p>For this pattern, there is a tile called
+<tt class="docutils literal"><span class="pre">&#64;&#64;plone.app.standardtiles.viewletmanager</span></tt>, which looks up and renders a
+viewlet manager. For example, the default sitelayout in Deco contains:</p>
+<div class="highlight-python"><pre>&lt;link  rel="tile" target="abovecontent-viewlets"
+    href="./@@plone.app.standardtiles.viewletmanager/above-content?manager=plone.abovecontent" /&gt;</pre>
+</div>
+<p>Note that the tile takes a parameter, <tt class="docutils literal"><span class="pre">manager</span></tt>, giving the name of the
+viewlet manager to look up and render. For viewlet managers rendered in the
+head of the page, we use:</p>
+<div class="highlight-python"><pre>&lt;link  rel="tile"
+    href="./@@plone.app.standardtiles.viewletmanager?manager=plone.htmlhead&amp;amp;section=head" /&gt;</pre>
+</div>
+<p>This ensures the contents of the viewlet manager are rendered in the
+<tt class="docutils literal"><span class="pre">&lt;head</span> <span class="pre">/&gt;</span></tt> of the tile, not the <tt class="docutils literal"><span class="pre">&lt;body</span> <span class="pre">/&gt;</span></tt>.</p>
+</div>
+<div class="section" id="what-happens-to-portlets">
+<h2>What happens to portlets?<a class="headerlink" href="#what-happens-to-portlets" title="Permalink to this headline">¶</a></h2>
+<p>Portlets should likely be replaced by tiles. This will require some
+refactoring, as tiles are considerably simpler than portlets. This simplicity
+is a good thing though: tiles are faster and easier to write and much easier
+to understand.</p>
+<p>There is a conceptual difference too: Instead of having portlet managers that
+acquire and block portlets from the content hierarchy, the sort of content and
+dynamic behaviour that is managed in portlets in Plone 3 and 4 would instead
+be modelled by tiles placed directly onto the appropriate site layout(s).</p>
+<p>If the situation warrants, the relevant tile could of course use some more
+abstraction e.g. to model inheritance of settings. In most cases, this should
+not be necessary, though: websites generally have only a handful of different
+layouts, which in Plone 4 sometimes require an elaborate dance of portlet
+assignment, inheritance and blocking.</p>
+<p>To users, there is really no distinction between app tiles used for things
+like a navigation tree or a listing of news items (both of which are portlets
+in Plone 4) and app tiles used for things like a poll or content listing on
+a page. With Deco-managed site layouts, tiles can be placed onto the layout
+wherever they are most appropriate, and there is no need to write ZCML and/or
+Python code to insert another portlet manager if you don&#8217;t have a three-column
+layout.</p>
+<p>There is, however, a &#8220;legacy&#8221; tile that can be used to render a the contents
+of a portlet manager, thus allowing existing portlets to be managed and
+rendered in the same way they are in Plone 4. For example:</p>
+<div class="highlight-python"><pre>&lt;link  rel="tile" target="left-portlets"
+    href="./@@plone.app.standardtiles.portletmanager/left-portlets?manager=plone.leftcolumn" /&gt;</pre>
+</div>
+</div>
+<div class="section" id="what-happens-to-content-types">
+<h2>What happens to content types?<a class="headerlink" href="#what-happens-to-content-types" title="Permalink to this headline">¶</a></h2>
+<p>Traditionally, achieving a particular non-trivial layout in a way that is
+consistent site wide has required the creation of a new content type. With
+Deco and page categories, many existing types can be thought of simply as
+pages with different layouts.</p>
+<p>For example:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Plone 4 type</th>
+<th class="head">Deco equivalent</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Page</td>
+<td>The standard page type with a simple default layout.</td>
+</tr>
+<tr class="row-odd"><td>Event</td>
+<td>A new category of page with a template page layout that
+includes the relevant metadata field tiles such as start
+and end dates.</td>
+</tr>
+<tr class="row-even"><td>News Item</td>
+<td>A new category of page with a layout that places a lead
+image underneath the title.</td>
+</tr>
+<tr class="row-odd"><td>Folder</td>
+<td>Pages can have sub-pages. This replaces the insanely
+confusing (to most users) &#8220;default page&#8221; concept. If you
+need a folder listing, you can place a folder listing
+tile on the page.</td>
+</tr>
+<tr class="row-even"><td>Collection</td>
+<td>The collections query builder is a tile: hence, a
+Collection becomes simply a page with an instance of
+that tile on it.</td>
+</tr>
+</tbody>
+</table>
+<p>Of course, page categories are treated as first-class content types everywhere
+in Plone, so they can used in catalog queries, for example.</p>
+<p>The remains are:</p>
+<ul class="simple">
+<li><em>Page</em> and its variants</li>
+<li><em>File</em>, which should handle both files and images, making image operations
+and behaviours available when dealing with a binary of an image MIME type.</li>
+<li>Any custom, forms-driven types: Dexterity (and in particular its
+through-the-web) types creation facilities provide an excellent way to model
+organisation-specific data structures with forms-driven data entry as the
+primary content management paradigm. Such types can have view templates that
+specify a site layout, or simply use the standard <tt class="docutils literal"><span class="pre">main_template</span></tt> macros,
+which in turn will use the default (global or section-specific) site layout.</li>
+</ul>
+</div>
+<div class="section" id="what-if-i-want-a-variable-width-layout">
+<h2>What if I want a variable-width layout?<a class="headerlink" href="#what-if-i-want-a-variable-width-layout" title="Permalink to this headline">¶</a></h2>
+<p>The grid system we are currently looking at, Bootstrap, does offer some level of support for variable-width layouts. With some work you could change the grid system used by deco to suite your needs.</p>
+</div>
+<div class="section" id="what-about-accessibility">
+<h2>What about accessibility?<a class="headerlink" href="#what-about-accessibility" title="Permalink to this headline">¶</a></h2>
+<p>There’s nothing about the new approach that is less accessible than the previous approach in Plone 4. You can always choose to give up the layout model and write HTML/STX/reST/Markdown etc. instead, which is probably a better approach at least for blind people. That being said, you can tab between different tiles when you edit, and it should be possible to get most of it working even from an accessibility perspective.</p>
+</div>
+<div class="section" id="what-about-using-alternative-visual-editors">
+<h2>What about using alternative visual editors?<a class="headerlink" href="#what-about-using-alternative-visual-editors" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll be using two terms to talk about this, just so we don&#8217;t get confused:</p>
+<ul class="simple">
+<li>Formatting: Simple text formatting tasks. Examples: Bold/italics, headlines, lists. Explicitly not about things like images, and possibly not even something as complex as tables.</li>
+<li>Layout: Adding richer content like images, videos, audio, using “tiles” — essentially the unification of portlets and viewlets. Layout also deals with positioning of these tiles using drag and drop, and is implemented in the DOM, outside of contentEditable.</li>
+</ul>
+<p>In a nutshell, we&#8217;re moving as much as we can of the layout responsibilities outside of the contentEditable (think TinyMCE) implementations in the different browsers.</p>
+<p>So what does this mean? It means that pretty much any editor can perform the required tasks, since we are de-scoping its responsibilities quite extensively.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="index.html"><img src="_static/logo.png" />
+</a></p>
+
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#how-do-i-theme-a-site-using-deco-and-blocks">How do I theme a site using Deco and Blocks?</a></li>
+<li><a class="reference internal" href="#what-happens-to-viewlets">What happens to viewlets?</a></li>
+<li><a class="reference internal" href="#what-happens-to-portlets">What happens to portlets?</a></li>
+<li><a class="reference internal" href="#what-happens-to-content-types">What happens to content types?</a></li>
+<li><a class="reference internal" href="#what-if-i-want-a-variable-width-layout">What if I want a variable-width layout?</a></li>
+<li><a class="reference internal" href="#what-about-accessibility">What about accessibility?</a></li>
+<li><a class="reference internal" href="#what-about-using-alternative-visual-editors">What about using alternative visual editors?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="working_on_deco.html"
+                        title="previous chapter">Working on Deco</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="advanced.html"
+                        title="next chapter">Advanced Usage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/faq.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="advanced.html" title="Advanced Usage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="working_on_deco.html" title="Working on Deco"
+             >previous</a> |</li>
+        <li><a href="index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+
+
+  </body>
+</html>
