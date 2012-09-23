@@ -59,7 +59,7 @@ def main():
         failures = []
         for egg in eggs:
             logger.info(
-                'Lookinf for buster.js tests in %s' % egg)
+                'Looking for buster.js tests in %s' % egg)
             egg_dir = os.path.join('src', egg)
             for dirpath, dirnames, filenames in os.walk(os.path.join(
                 'src', egg)):
