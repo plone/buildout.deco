@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,9 +9,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>plone.app.imagetile.tile &mdash; Deco 1.0 documentation</title>
+    <title>plone.app.imagetile.tile &mdash; Plone Deco</title>
     
-    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/plone.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,10 +26,76 @@
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <link rel="top" title="Deco 1.0 documentation" href="../../../../index.html" />
-    <link rel="up" title="Module code" href="../../../index.html" /> 
+    <link rel="top" title="Plone Deco" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" />
+<script language="javascript">
+//<![CDATA[
+
+Documentation.addTranslations({"locale": "fr", "plural_expr": "(n > 1)", "messages": {"See the definition": "Voir la d\u00e9finition"}});
+
+// See http://disqus.disqus.com/general_integration_help/
+var disqus_developer = 1;
+if (document.location.protocol == 'http:') {
+    disqus_developer = 0;
+}
+
+// Some HTML/CSS transforms we can't do in pure CSS (waiting for CSS3 support)
+$(document).ready(function () {
+
+    // Style of .. verisonmodified:: , .. versionadded:: ...
+    $('p:has(span.versionmodified)').addClass('p-versionmodified');
+
+    // Style of the TOC tree
+    $('ul:has(li.toctree-l1)').addClass('toctree');
+
+    // Decorate links to other sites
+    $('a[class~=external]').attr('target', '_blank');
+
+    // Glossary terms
+    $('em.xref').attr('title', _('See the definition'));
+
+    // We need to have all <pre> in a <div class="highlight"> to mimic pygments
+    // to work around a pygments (?) bug
+    var suffixes = {cfg: null, python:null};
+    for (var suffix in suffixes) {
+        var pattern = 'div.highlight-' + suffix + ' > pre';
+        $(pattern).wrap('<div class="highlight" />');
+    }
+    return true;
+});
+//]]>
+</script>
+
   </head>
   <body>
+<!--[if lte IE 6]>
+<style type="text/css">
+#ie6msg{border:3px solid #090; margin:8px 0; background:#cfc; color:#000;}
+#ie6msg h4{margin:8px; padding:0;}
+#ie6msg p{margin:8px; padding:0;}
+#ie6msg p a.getie8{font-weight:bold; color:#006;}
+#ie6msg p a.ie6expl{font-weight:normal; color:#006;}
+</style>
+<div id="ie6msg">
+<h4>Did you know that your browser is out of date?</h4>
+<p>If the layout of this site seems ugly, that's because you're actually using
+an outdated browser. And we wont put any effort to provide a nice layout to IE6
+users.</p>
+<p>To get the best possible experience using our website we recommend that you
+upgrade your browser to a newer version. The current version
+is <a class="getie8"
+href="http://upgradeie.s3.amazonaws.com/eng/index.html">Internet Explorer
+8</a>. The upgrade is free. If you're using a PC at work you should contact your
+IT administrator.</p>
+<p>If you want to you may also try some other popular Internet browsers
+like <a class="ie6expl"
+href="http://getfirefox.com">Firefox</a>, <a class="ie6expl"
+href="http://www.google.com/chrome">Chrome</a>, <a class="ie6expl"
+href="http://www.opera.com">Opera</a>, or <a class="ie6expl"
+href="http://www.apple.com/safari/download/">Safari</a></p>
+</div>
+<![endif]-->
+
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -40,7 +108,8 @@
         <li><a href="../../../../index.html">Deco</a> &raquo;</li>
           <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -48,22 +117,31 @@
           <div class="body">
             
   <h1>Source code for plone.app.imagetile.tile</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.schema</span> <span class="kn">import</span> <span class="n">URI</span>
 <span class="kn">from</span> <span class="nn">zope.schema</span> <span class="kn">import</span> <span class="n">Text</span>
 <span class="kn">from</span> <span class="nn">zope.schema</span> <span class="kn">import</span> <span class="n">TextLine</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">invariant</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Invalid</span>
 <span class="kn">from</span> <span class="nn">zope.i18nmessageid</span> <span class="kn">import</span> <span class="n">MessageFactory</span>
-<span class="kn">from</span> <span class="nn">plone.tiles.tile</span> <span class="kn">import</span> <span class="n">PersistentTile</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 <span class="kn">from</span> <span class="nn">plone.app.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileBaseSchema</span>
-
-<span class="kn">from</span> <span class="nn">plone.namedfile.field</span> <span class="kn">import</span> <span class="n">NamedImage</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
 
 <span class="n">_</span> <span class="o">=</span> <span class="n">MessageFactory</span><span class="p">(</span><span class="s">&#39;plone&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">IImageTile</span><span class="p">(</span><span class="n">ITileBaseSchema</span><span class="p">):</span>
 
-    <span class="n">picture</span> <span class="o">=</span> <span class="n">NamedImage</span><span class="p">(</span>
-        <span class="n">title</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Select an image&#39;</span><span class="p">),</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">URI</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;External Image URL&#39;</span><span class="p">),</span>
+        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c"># -- or --</span>
+
+    <span class="n">uid</span> <span class="o">=</span> <span class="n">TextLine</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">u&quot;Please select image from Image Repository&quot;</span><span class="p">),</span>
+        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c"># -- rest --</span>
@@ -78,14 +156,39 @@
         <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="p">)</span>
 
+    <span class="nd">@invariant</span>
+    <span class="k">def</span> <span class="nf">url_or_uid</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;uid&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Invalid</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Url and Uid field can not be filled &#39;</span> <span class="o">+</span> \
+                            <span class="s">&#39;at the same time.&#39;</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ImageTile"><a class="viewcode-back" href="../../../../api/plone.app.imagetile.html#plone.app.imagetile.tile.ImageTile">[docs]</a><span class="k">class</span> <span class="nc">ImageTile</span><span class="p">(</span><span class="n">PersistentTile</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;uid&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Invalid</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;No image specified.&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+
+<div class="viewcode-block" id="ImageTile"><a class="viewcode-back" href="../../../../api/plone.app.imagetile.html#plone.app.imagetile.tile.ImageTile">[docs]</a><span class="k">class</span> <span class="nc">ImageTile</span><span class="p">(</span><span class="n">Tile</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A tile which displays an image.</span>
 
-<span class="sd">    This is a persistent tile which stores a reference to an image and</span>
+<span class="sd">    This is a transient tile which stores a reference to an image and</span>
 <span class="sd">    optionally alt text. When rendered, the tile will look-up the image</span>
 <span class="sd">    url and output an &lt;img /&gt; tag.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="ImageTile.image_src"><a class="viewcode-back" href="../../../../api/plone.app.imagetile.html#plone.app.imagetile.tile.ImageTile.image_src">[docs]</a>    <span class="k">def</span> <span class="nf">image_src</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;uid&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">(</span><span class="n">UID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;uid&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getURL</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">False</span></div></div>
 </pre></div>
 
           </div>
@@ -93,6 +196,9 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../../../../index.html"><img src="../../../../_static/logo.png" />
+</a></p>
+
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../../../search.html" method="get">
@@ -123,10 +229,13 @@
           <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
+
     <div class="footer">
         &copy; Copyright 2011, Plone Foundation.
       Last updated on Sep 23, 2012.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
+
+
   </body>
 </html>
