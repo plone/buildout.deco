@@ -48,32 +48,6 @@ def main():
         else:
             raise subprocess.CalledProcessError(
                 'Server closed stdout without capturing a slave.')
-    
-        # Run the tests
-        options = [option.strip() for option in """${options}""".split()
-                   if option.strip()]
-        output = """${stdout}""".strip()
-        if output and not os.path.isdir(output):
-            os.makedirs(output)
-        failures = []
-                    stdout = sys.stdout
-                    if output:
-                        result = dirpath[len(egg_dir):].strip('/').replace(
-                            '/', '-') + '.xml'
-                        stdout = open(os.path.join(output, result), 'w')
-                    logger.info(
-                        'Running buster.js tests in %s' % dirpath)
-                    retcode = subprocess.call(
-                        [os.path.join('bin', 'buster-test')] + options
-                        + ['--config', os.path.join(dirpath, filename)]
-                        + sys.argv[1:], stdout=stdout)
-                    if retcode:
-                        failures.append(dirpath)
-                        logger.error(
-                            'Failures in %s buster.js tests' % dirpath)
-                    break
-
-        return failures
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
