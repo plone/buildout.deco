@@ -75,8 +75,8 @@ def main():
                         'Running buster.js tests in %s' % dirpath)
                     retcode = subprocess.call(
                         [os.path.join('bin', 'buster-test')] + options
-                        + ['--config', os.path.join(dirpath, filename)],
-                        stdout=stdout)
+                        + ['--config', os.path.join(dirpath, filename)]
+                        + sys.argv[1:], stdout=stdout)
                     if retcode:
                         failures.append(dirpath)
                         logger.error(
