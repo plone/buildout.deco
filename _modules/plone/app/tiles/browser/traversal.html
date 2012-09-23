@@ -1,0 +1,301 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.tiles.browser.traversal &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.tiles.browser.traversal</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span><span class="p">,</span> <span class="n">implements</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">queryMultiAdapter</span><span class="p">,</span> <span class="n">queryUtility</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getUtility</span>
+
+<span class="kn">from</span> <span class="nn">zope.security</span> <span class="kn">import</span> <span class="n">checkPermission</span>
+<span class="kn">from</span> <span class="nn">zope.publisher.interfaces</span> <span class="kn">import</span> <span class="n">IPublishTraverse</span>
+<span class="kn">from</span> <span class="nn">zope.annotation.interfaces</span> <span class="kn">import</span> <span class="n">IAnnotations</span>
+
+<span class="kn">from</span> <span class="nn">plone.memoize.view</span> <span class="kn">import</span> <span class="n">memoize</span>
+<span class="kn">from</span> <span class="nn">plone.registry.interfaces</span> <span class="kn">import</span> <span class="n">IRegistry</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileType</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.data</span> <span class="kn">import</span> <span class="n">ANNOTATIONS_KEY_PREFIX</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileAddView</span><span class="p">,</span> <span class="n">ITileEditView</span>
+<span class="kn">from</span> <span class="nn">plone.app.tiles</span> <span class="kn">import</span> <span class="n">MessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="TileTraverser"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.TileTraverser">[docs]</a><span class="k">class</span> <span class="nc">TileTraverser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for tile add/edit view traversers.</span>
+
+<span class="sd">    Below, we register two traversal views: ``@@add-tile`` and</span>
+<span class="sd">    ``@@edit-tile``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">targetInterface</span> <span class="o">=</span> <span class="n">Interface</span>
+    <span class="n">implements</span><span class="p">(</span><span class="n">IPublishTraverse</span><span class="p">)</span>
+
+    <span class="n">view</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="TileTraverser.getTileViewByName"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.TileTraverser.getTileViewByName">[docs]</a>    <span class="k">def</span> <span class="nf">getTileViewByName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;We look up for adapter from ``(context, request, tileType)`` to an</span>
+<span class="sd">        appropriate interface. The default is to use the unnamed adapter, but</span>
+<span class="sd">        this can be overridden by registering a named adapter with the name of</span>
+<span class="sd">        the tile type. This way, a custom add/edit view can be reigstered for</span>
+<span class="sd">        a particular type of tile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tile_info</span> <span class="o">=</span> <span class="n">queryUtility</span><span class="p">(</span><span class="n">ITileType</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">tile_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tile_info</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">tile_name</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">tile_info</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetInterface</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">tile_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">tile_info</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">targetInterface</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">tile_name</span><span class="p">)</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="n">tile_name</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">__parent__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
+
+        <span class="k">return</span> <span class="n">view</span>
+
+</div></div>
+<div class="viewcode-block" id="AddTile"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.AddTile">[docs]</a><span class="k">class</span> <span class="nc">AddTile</span><span class="p">(</span><span class="n">TileTraverser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements the @@add-tile traversal view</span>
+
+<span class="sd">    Rendering this view on its own will display a template where the user</span>
+<span class="sd">    may choose a tile type to add.</span>
+
+<span class="sd">    Traversing to /path/to/obj/@@add-tile/tile-name will:</span>
+
+<span class="sd">        * Look up the tile info for &#39;tile-name&#39; as a named utility</span>
+<span class="sd">        * Attempt to find view which is an adapter for (context, request,</span>
+<span class="sd">            tile_info) with the name &#39;tile-name&#39;</span>
+<span class="sd">        * Fall back on the unnamed adapter of the same triple</span>
+<span class="sd">        * Return above found view for rendering</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">targetInterface</span> <span class="o">=</span> <span class="n">ITileAddView</span>
+
+<div class="viewcode-block" id="AddTile.tileSortKey"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.AddTile.tileSortKey">[docs]</a>    <span class="k">def</span> <span class="nf">tileSortKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type1</span><span class="p">,</span> <span class="n">type2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">type1</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">type2</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</div>
+    <span class="nd">@memoize</span>
+<div class="viewcode-block" id="AddTile.tileTypes"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.AddTile.tileTypes">[docs]</a>    <span class="k">def</span> <span class="nf">tileTypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of addable ITileType objects representing tiles</span>
+<span class="sd">        which are addable in the current context</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">tile_name</span> <span class="ow">in</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">IRegistry</span><span class="p">)[</span><span class="s">&#39;plone.app.tiles&#39;</span><span class="p">]:</span>
+            <span class="n">tiletype</span> <span class="o">=</span> <span class="n">getUtility</span><span class="p">(</span><span class="n">ITileType</span><span class="p">,</span> <span class="n">tile_name</span><span class="p">)</span>
+            <span class="c"># check if we have permission to add this tile</span>
+            <span class="k">if</span> <span class="n">checkPermission</span><span class="p">(</span><span class="n">tiletype</span><span class="o">.</span><span class="n">add_permission</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">):</span>
+                <span class="c"># tile actions</span>
+                <span class="c"># TODO: read from registry</span>
+                <span class="n">tiletype</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="p">[{</span>
+                    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;edit&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="s">&#39;@@edit-tile&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Edit&#39;</span><span class="p">),</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;remove&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="s">&#39;@@delete-tile&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Remove&#39;</span><span class="p">),</span>
+                <span class="p">}]</span>
+                <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tiletype</span><span class="p">)</span>
+
+        <span class="n">tiles</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileSortKey</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tiles</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;disable_border&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">if</span> <span class="s">&#39;form.button.Create&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">:</span>
+            <span class="n">newTileType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tiletype&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">newTileType</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;tiletype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;You must select the type of &quot;</span> <span class="o">+</span> \
+                                            <span class="s">u&quot;tile to create&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">/@@add-tile/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> \
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">absolute_url</span><span class="p">(),</span> <span class="n">newTileType</span><span class="p">))</span>
+                <span class="k">return</span> <span class="s">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AddTile.publishTraverse"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.AddTile.publishTraverse">[docs]</a>    <span class="k">def</span> <span class="nf">publishTraverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allow traversal to @@&lt;view&gt;/tilename</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># 1. Look up the view, but keep this view as the traversal context</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTileViewByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span>
+
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="EditTile"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.EditTile">[docs]</a><span class="k">class</span> <span class="nc">EditTile</span><span class="p">(</span><span class="n">TileTraverser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements the @@edit-tile namespace.</span>
+
+<span class="sd">    Traversing to /path/to/obj/@@edit-tile/tile-name/tile-id will:</span>
+
+<span class="sd">        * Look up the tile info for &#39;tile-name&#39; as a named utility</span>
+<span class="sd">        * Attempt to find an adapter for (context, request, tile_info) with</span>
+<span class="sd">            the name &#39;tile-name&#39;</span>
+<span class="sd">        * Fall back on the unnamed adapter of the same triple</span>
+<span class="sd">        * Set the &#39;tileId&#39; property on the view to the id &#39;tile-id</span>
+<span class="sd">        * Return the view for rendering</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">targetInterface</span> <span class="o">=</span> <span class="n">ITileEditView</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Please traverse to @@edit-tile/tilename/id&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EditTile.publishTraverse"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.EditTile.publishTraverse">[docs]</a>    <span class="k">def</span> <span class="nf">publishTraverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allow traversal to @@&lt;view&gt;/tilename/tileid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># 1. Look up the view, but keep this view as the traversal context in</span>
+        <span class="c"># anticipation of an id</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTileViewByName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="c"># 2. Set the id and return the view we looked up in the previous</span>
+        <span class="c"># traversal step.</span>
+        <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">,</span> <span class="s">&#39;tileId&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">tileId</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span>
+
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="DeleteTile"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.DeleteTile">[docs]</a><span class="k">class</span> <span class="nc">DeleteTile</span><span class="p">(</span><span class="n">TileTraverser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements the @@delete-tile traversal view</span>
+
+<span class="sd">    Traversing to /path/to/obj/@@delete-tile will list all tiles.</span>
+<span class="sd">    Traversing to /path/to/obj/@@delete-tile/tile-id will delete tile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tileId</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DeleteTile</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DeleteTile.tiles"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.DeleteTile.tiles">[docs]</a>    <span class="k">def</span> <span class="nf">tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">item</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+</div>
+<div class="viewcode-block" id="DeleteTile.publishTraverse"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.traversal.DeleteTile.publishTraverse">[docs]</a>    <span class="k">def</span> <span class="nf">publishTraverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allow traversal to @@delete-tile/tilename</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

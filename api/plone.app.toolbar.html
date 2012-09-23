@@ -1,0 +1,246 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>toolbar Package &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Complete API and advanced usage" href="index.html" />
+    <link rel="next" title="directives Package" href="plone.directives.html" />
+    <link rel="prev" title="browser Package" href="plone.app.tiles.browser.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.directives.html" title="directives Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plone.app.tiles.browser.html" title="browser Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="toolbar-package">
+<h1>toolbar Package<a class="headerlink" href="#toolbar-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">toolbar</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-plone.app.toolbar"></span></div>
+<div class="section" id="module-plone.app.toolbar.bbb">
+<span id="bbb-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">bbb</span></tt> Module<a class="headerlink" href="#module-plone.app.toolbar.bbb" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.toolbar.bbb.NullViewlet">
+<em class="property">class </em><tt class="descclassname">plone.app.toolbar.bbb.</tt><tt class="descname">NullViewlet</tt><big>(</big><em>context</em>, <em>request</em>, <em>view</em>, <em>manager</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/bbb.html#NullViewlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.bbb.NullViewlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.viewlet.viewlet.ViewletBase</span></tt></p>
+<p>Simply view that renders an empty string.</p>
+<p>For BBB purposes, to disable certain viewlets, we register an override
+for the same name and context, specific to the ICMSUILayer layer, using
+this class to render nothing.</p>
+<dl class="method">
+<dt id="plone.app.toolbar.bbb.NullViewlet.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/bbb.html#NullViewlet.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.bbb.NullViewlet.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.toolbar.bbb.ToolbarViewlet">
+<em class="property">class </em><tt class="descclassname">plone.app.toolbar.bbb.</tt><tt class="descname">ToolbarViewlet</tt><big>(</big><em>context</em>, <em>request</em>, <em>view</em>, <em>manager</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/bbb.html#ToolbarViewlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.bbb.ToolbarViewlet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.viewlet.viewlet.ViewletBase</span></tt></p>
+<dl class="method">
+<dt id="plone.app.toolbar.bbb.ToolbarViewlet.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/bbb.html#ToolbarViewlet.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.bbb.ToolbarViewlet.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.toolbar.interfaces">
+<span id="interfaces-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interfaces</span></tt> Module<a class="headerlink" href="#module-plone.app.toolbar.interfaces" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="testing-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">testing</span></tt> Module<a class="headerlink" href="#testing-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plone.app.toolbar.toolbar">
+<span id="toolbar-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">toolbar</span></tt> Module<a class="headerlink" href="#module-plone.app.toolbar.toolbar" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile">
+<em class="property">class </em><tt class="descclassname">plone.app.toolbar.toolbar.</tt><tt class="descname">ToolbarTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="plone.tiles.html#plone.tiles.tile.Tile" title="plone.tiles.tile.Tile"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.tile.Tile</span></tt></a></p>
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.actions">
+<tt class="descname">actions</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.contentmenu">
+<tt class="descname">contentmenu</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.contentmenu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.contentmenu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.get_multi_adapter">
+<tt class="descname">get_multi_adapter</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.get_multi_adapter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.get_multi_adapter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.is_deco_enabled">
+<tt class="descname">is_deco_enabled</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.is_deco_enabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.is_deco_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.resources">
+<tt class="descname">resources</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.resources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.user_actions">
+<tt class="descname">user_actions</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.user_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.user_actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.user_displayname">
+<tt class="descname">user_displayname</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.user_displayname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.user_displayname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.user_homeurl">
+<tt class="descname">user_homeurl</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.user_homeurl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.user_homeurl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.ToolbarTile.user_portrait">
+<tt class="descname">user_portrait</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#ToolbarTile.user_portrait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.ToolbarTile.user_portrait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.toolbar.toolbar.UnthemedRequest">
+<em class="property">class </em><tt class="descclassname">plone.app.toolbar.toolbar.</tt><tt class="descname">UnthemedRequest</tt><big>(</big><em>context</em>, <em>request=None</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#UnthemedRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.UnthemedRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="plone.app.toolbar.toolbar.UnthemedRequest.traverse">
+<tt class="descname">traverse</tt><big>(</big><em>name</em>, <em>ignore</em><big>)</big><a class="reference internal" href="../_modules/plone/app/toolbar/toolbar.html#UnthemedRequest.traverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.toolbar.toolbar.UnthemedRequest.traverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">toolbar Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">toolbar</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-plone.app.toolbar.bbb"><tt class="docutils literal"><span class="pre">bbb</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.toolbar.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li><a class="reference internal" href="#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.toolbar.toolbar"><tt class="docutils literal"><span class="pre">toolbar</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plone.app.tiles.browser.html"
+                        title="previous chapter">browser Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plone.directives.html"
+                        title="next chapter">directives Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/plone.app.toolbar.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.directives.html" title="directives Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plone.app.tiles.browser.html" title="browser Package"
+             >previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" >Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

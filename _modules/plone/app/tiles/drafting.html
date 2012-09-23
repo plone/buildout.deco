@@ -1,0 +1,153 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.tiles.drafting &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.tiles.drafting</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">adapts</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">adapter</span>
+
+<span class="kn">from</span> <span class="nn">zope.annotation.interfaces</span> <span class="kn">import</span> <span class="n">IAnnotations</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileDataContext</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITile</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.data</span> <span class="kn">import</span> <span class="n">ANNOTATIONS_KEY_PREFIX</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.drafts.interfaces</span> <span class="kn">import</span> <span class="n">IDrafting</span>
+<span class="kn">from</span> <span class="nn">plone.app.drafts.interfaces</span> <span class="kn">import</span> <span class="n">IDraftSyncer</span>
+<span class="kn">from</span> <span class="nn">plone.app.drafts.interfaces</span> <span class="kn">import</span> <span class="n">IDraft</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.drafts.proxy</span> <span class="kn">import</span> <span class="n">DraftProxy</span>
+<span class="kn">from</span> <span class="nn">plone.app.drafts.utils</span> <span class="kn">import</span> <span class="n">getCurrentDraft</span>
+
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">ITileDataContext</span><span class="p">)</span>
+<span class="nd">@adapter</span><span class="p">(</span><span class="n">Interface</span><span class="p">,</span> <span class="n">IDrafting</span><span class="p">,</span> <span class="n">ITile</span><span class="p">)</span>
+<div class="viewcode-block" id="draftingTileDataContext"><a class="viewcode-back" href="../../../../api/plone.app.tiles.html#plone.app.tiles.drafting.draftingTileDataContext">[docs]</a><span class="k">def</span> <span class="nf">draftingTileDataContext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;If we are drafting a content item, record tile data information</span>
+<span class="sd">    to the draft, but read existing data from the underlying object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">draft</span> <span class="o">=</span> <span class="n">getCurrentDraft</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">draft</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">context</span>
+
+    <span class="k">return</span> <span class="n">DraftProxy</span><span class="p">(</span><span class="n">draft</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TileDataDraftSyncer"><a class="viewcode-back" href="../../../../api/plone.app.tiles.html#plone.app.tiles.drafting.TileDataDraftSyncer">[docs]</a><span class="k">class</span> <span class="nc">TileDataDraftSyncer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Copy draft persistent tile data to the real object on save</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">IDraftSyncer</span><span class="p">)</span>
+    <span class="n">adapts</span><span class="p">(</span><span class="n">IDraft</span><span class="p">,</span> <span class="n">Interface</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draft</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draft</span> <span class="o">=</span> <span class="n">draft</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">draftAnnotations</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draft</span><span class="p">)</span>
+        <span class="n">targetAnnotations</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">draftAnnotations</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">):</span>
+                <span class="n">targetAnnotations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">annotationsDeleted</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draft</span><span class="p">,</span> <span class="s">&#39;_proxyAnnotationsDeleted&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">annotationsDeleted</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">targetAnnotations</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">targetAnnotations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

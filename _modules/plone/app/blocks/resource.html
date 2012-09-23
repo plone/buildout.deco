@@ -1,0 +1,255 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.blocks.resource &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.blocks.resource</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">urlparse</span>
+<span class="kn">import</span> <span class="nn">Globals</span>
+
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">adapter</span>
+
+<span class="kn">from</span> <span class="nn">zope.site.hooks</span> <span class="kn">import</span> <span class="n">getSite</span>
+
+<span class="kn">from</span> <span class="nn">zope.publisher.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+
+<span class="kn">from</span> <span class="nn">zope.schema.interfaces</span> <span class="kn">import</span> <span class="n">IVocabularyFactory</span>
+<span class="kn">from</span> <span class="nn">zope.schema.vocabulary</span> <span class="kn">import</span> <span class="n">SimpleVocabulary</span>
+<span class="kn">from</span> <span class="nn">zope.schema.vocabulary</span> <span class="kn">import</span> <span class="n">SimpleTerm</span>
+
+<span class="kn">from</span> <span class="nn">plone.resource.traversal</span> <span class="kn">import</span> <span class="n">ResourceTraverser</span>
+<span class="kn">from</span> <span class="nn">plone.resource.manifest</span> <span class="kn">import</span> <span class="n">getAllResources</span>
+
+<span class="kn">from</span> <span class="nn">plone.registry.interfaces</span> <span class="kn">import</span> <span class="n">IRecordModifiedEvent</span>
+
+<span class="kn">from</span> <span class="nn">plone.memoize.volatile</span> <span class="kn">import</span> <span class="n">cache</span><span class="p">,</span> <span class="n">DontCache</span><span class="p">,</span> <span class="n">store_on_context</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.blocks.interfaces</span> <span class="kn">import</span> <span class="n">SITE_LAYOUT_RESOURCE_NAME</span>
+<span class="kn">from</span> <span class="nn">plone.app.blocks.interfaces</span> <span class="kn">import</span> <span class="n">SITE_LAYOUT_FILE_NAME</span>
+<span class="kn">from</span> <span class="nn">plone.app.blocks.interfaces</span> <span class="kn">import</span> <span class="n">SITE_LAYOUT_MANIFEST_FORMAT</span>
+<span class="kn">from</span> <span class="nn">plone.app.blocks.interfaces</span> <span class="kn">import</span> <span class="n">DEFAULT_SITE_LAYOUT_REGISTRY_KEY</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.blocks.utils</span> <span class="kn">import</span> <span class="n">resolveResource</span>
+<span class="kn">from</span> <span class="nn">plone.app.blocks.utils</span> <span class="kn">import</span> <span class="n">getDefaultSiteLayout</span>
+<span class="kn">from</span> <span class="nn">plone.app.blocks.utils</span> <span class="kn">import</span> <span class="n">getLayoutAwareSiteLayout</span>
+
+<span class="kn">from</span> <span class="nn">Acquisition</span> <span class="kn">import</span> <span class="n">aq_parent</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+<span class="kn">from</span> <span class="nn">OFS.interfaces</span> <span class="kn">import</span> <span class="n">ITraversable</span>
+<span class="kn">from</span> <span class="nn">zExceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
+
+
+<div class="viewcode-block" id="SiteLayoutTraverser"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.SiteLayoutTraverser">[docs]</a><span class="k">class</span> <span class="nc">SiteLayoutTraverser</span><span class="p">(</span><span class="n">ResourceTraverser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The site layout traverser.</span>
+
+<span class="sd">    Allows traveral to /++sitelayout++&lt;name&gt; using ``plone.resource`` to fetch</span>
+<span class="sd">    things stored either on the filesystem or in the ZODB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">SITE_LAYOUT_RESOURCE_NAME</span>
+
+</div>
+<div class="viewcode-block" id="AvailableLayoutsVocabulary"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.AvailableLayoutsVocabulary">[docs]</a><span class="k">class</span> <span class="nc">AvailableLayoutsVocabulary</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Vocabulary to return available layouts of a given type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">IVocabularyFactory</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">defaultFilename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">defaultFilename</span> <span class="o">=</span> <span class="n">defaultFilename</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">getAllResources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="n">resources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultFilename</span>
+
+            <span class="k">if</span> <span class="n">manifest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">manifest</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">title</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">manifest</span><span class="p">[</span><span class="s">&#39;file&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">filename</span>
+
+            <span class="n">path</span> <span class="o">=</span> <span class="s">&quot;/++</span><span class="si">%s</span><span class="s">++</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">resourceType</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SimpleTerm</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">title</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">SimpleVocabulary</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+</div>
+<span class="n">AvailableSiteLayoutsVocabularyFactory</span> <span class="o">=</span> <span class="n">AvailableLayoutsVocabulary</span><span class="p">(</span>
+        <span class="n">SITE_LAYOUT_MANIFEST_FORMAT</span><span class="p">,</span>
+        <span class="n">SITE_LAYOUT_FILE_NAME</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="cacheKey"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.cacheKey">[docs]</a><span class="k">def</span> <span class="nf">cacheKey</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Invalidate if the fti is modified, the global registry is modified,</span>
+<span class="sd">    or the content is modified</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">Globals</span><span class="o">.</span><span class="n">DevelopmentMode</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DontCache</span><span class="p">()</span>
+
+    <span class="n">catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;_p_mtime&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span>
+            <span class="n">catalog</span><span class="o">.</span><span class="n">getCounter</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+</div>
+<span class="nd">@adapter</span><span class="p">(</span><span class="n">IRecordModifiedEvent</span><span class="p">)</span>
+<div class="viewcode-block" id="globalSiteLayoutModified"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.globalSiteLayoutModified">[docs]</a><span class="k">def</span> <span class="nf">globalSiteLayoutModified</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Invalidate caches if the global site layout is changed. This will</span>
+<span class="sd">    likely also affect things cached using plone.app.caching, which is what</span>
+<span class="sd">    we want - the page has probably changed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="n">DEFAULT_SITE_LAYOUT_REGISTRY_KEY</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">oldValue</span> <span class="o">!=</span> <span class="n">event</span><span class="o">.</span><span class="n">newValue</span><span class="p">:</span>
+            <span class="n">catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="n">getSite</span><span class="p">(),</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">catalog</span><span class="p">,</span> <span class="s">&#39;_increment_counter&#39;</span><span class="p">):</span>
+                <span class="n">catalog</span><span class="o">.</span><span class="n">_increment_counter</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="DefaultSiteLayout"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.DefaultSiteLayout">[docs]</a><span class="k">class</span> <span class="nc">DefaultSiteLayout</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Look up and render the site layout to use for the context.</span>
+
+<span class="sd">    Use this for a page that does not have the ILayout behavior, or a</span>
+<span class="sd">    standalone page template.</span>
+
+<span class="sd">    The idea is that you can do:</span>
+
+<span class="sd">        &lt;html data-layout=&quot;./@@default-site-layout&quot;&gt;</span>
+
+<span class="sd">    and always get the correct site layout for the page, taking section-</span>
+<span class="sd">    specific settings into account.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@cache</span><span class="p">(</span><span class="n">cacheKey</span><span class="p">,</span> <span class="n">store_on_context</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getLayout</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">layout</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">(</span><span class="s">&quot;No default site layout set&quot;</span><span class="p">)</span>
+
+        <span class="n">pathContext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">ITraversable</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">pathContext</span><span class="p">):</span>
+            <span class="n">pathContext</span> <span class="o">=</span> <span class="n">aq_parent</span><span class="p">(</span><span class="n">pathContext</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pathContext</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">layout</span>
+        <span class="k">if</span> <span class="n">pathContext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">pathContext</span><span class="o">.</span><span class="n">absolute_url_path</span><span class="p">(),</span> <span class="n">layout</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">resolveResource</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">getDefaultSiteLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="PageSiteLayout"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.resource.PageSiteLayout">[docs]</a><span class="k">class</span> <span class="nc">PageSiteLayout</span><span class="p">(</span><span class="n">DefaultSiteLayout</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Look up and render the site layout to use for the context.</span>
+
+<span class="sd">    Use this for a page that does have the ILayout behavior. It will take the</span>
+<span class="sd">    ``pageSiteLayout`` property into account.</span>
+
+<span class="sd">    The idea is that you can do:</span>
+
+<span class="sd">        &lt;html data-layout=&quot;./@@page-site-layout&quot;&gt;</span>
+
+<span class="sd">    and always get the correct site layout for the page, taking section-</span>
+<span class="sd">    and page-specific settings into account.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_getLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">getLayoutAwareSiteLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

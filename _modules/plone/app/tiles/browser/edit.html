@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.tiles.browser.edit &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.tiles.browser.edit</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">z3c.form</span> <span class="kn">import</span> <span class="n">form</span><span class="p">,</span> <span class="n">button</span>
+<span class="kn">from</span> <span class="nn">plone.z3cform</span> <span class="kn">import</span> <span class="n">layout</span>
+
+<span class="kn">from</span> <span class="nn">zope.lifecycleevent</span> <span class="kn">import</span> <span class="n">ObjectModifiedEvent</span>
+<span class="kn">from</span> <span class="nn">zope.event</span> <span class="kn">import</span> <span class="n">notify</span>
+
+<span class="kn">from</span> <span class="nn">zope.traversing.browser.absoluteurl</span> <span class="kn">import</span> <span class="n">absoluteURL</span>
+
+<span class="kn">from</span> <span class="nn">Products.statusmessages.interfaces</span> <span class="kn">import</span> <span class="n">IStatusMessage</span>
+<span class="kn">from</span> <span class="nn">Products.Five.browser.pagetemplatefile</span> <span class="kn">import</span> <span class="n">ViewPageTemplateFile</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileDataManager</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.tiles.browser.base</span> <span class="kn">import</span> <span class="n">TileForm</span>
+<span class="kn">from</span> <span class="nn">plone.app.tiles.utils</span> <span class="kn">import</span> <span class="n">appendJSONData</span>
+<span class="kn">from</span> <span class="nn">plone.app.tiles</span> <span class="kn">import</span> <span class="n">MessageFactory</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<div class="viewcode-block" id="DefaultEditForm"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm">[docs]</a><span class="k">class</span> <span class="nc">DefaultEditForm</span><span class="p">(</span><span class="n">TileForm</span><span class="p">,</span> <span class="n">form</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Standard tile edit form, which is wrapped by DefaultEditView (see</span>
+<span class="sd">    below).</span>
+
+<span class="sd">    This form is capable of rendering the fields of any tile schema as defined</span>
+<span class="sd">    by an ITileType utility.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;edit_tile&quot;</span>
+
+    <span class="c"># Set during traversal</span>
+    <span class="n">tileType</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">tileId</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="n">ignoreContext</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="c"># Avoid the data to be extracted from the request directly by the form</span>
+    <span class="c"># instead of using the tile data manager.</span>
+    <span class="n">ignoreRequest</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DefaultEditForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;disable_border&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="DefaultEditForm.update"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">&#39;buttons.save&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span> <span class="ow">or</span> \
+           <span class="s">&#39;buttons.cancel&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ignoreRequest</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">DefaultEditForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="DefaultEditForm.getContent"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.getContent">[docs]</a>    <span class="k">def</span> <span class="nf">getContent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">typeName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="n">tileId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span>
+
+        <span class="c"># Traverse to the tile. If it is a transient tile, it will pick up</span>
+        <span class="c"># query string parameters from the original request</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span><span class="s">&#39;@@</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">typeName</span><span class="p">,</span> <span class="n">tileId</span><span class="p">,))</span>
+
+        <span class="n">dataManager</span> <span class="o">=</span> <span class="n">ITileDataManager</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataManager</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+    <span class="c"># UI</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="DefaultEditForm.label"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Edit ${name}&quot;</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">title</span><span class="p">})</span>
+
+    <span class="c"># Buttons/actions</span>
+</div>
+    <span class="nd">@button.buttonAndHandler</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;save&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="DefaultEditForm.handleSave"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.handleSave">[docs]</a>    <span class="k">def</span> <span class="nf">handleSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formErrorsMessage</span>
+            <span class="k">return</span>
+
+        <span class="n">typeName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">__name__</span>
+
+        <span class="c"># Traverse to a new tile in the context, with no data</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">restrictedTraverse</span><span class="p">(</span>
+                <span class="s">&#39;@@</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">typeName</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileId</span><span class="p">,))</span>
+
+        <span class="n">dataManager</span> <span class="o">=</span> <span class="n">ITileDataManager</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+        <span class="n">dataManager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c"># Look up the URL - we need to do this after we&#39;ve set the data to</span>
+        <span class="c"># correctly account for transient tiles</span>
+        <span class="n">tileURL</span> <span class="o">=</span> <span class="n">absoluteURL</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="c">#contextURL = absoluteURL(tile.context, self.request)</span>
+        <span class="c">#if tileURL.startswith(contextURL):</span>
+        <span class="c">#    tileURL = &#39;.&#39; + tileURL[len(contextURL):]</span>
+
+        <span class="n">notify</span><span class="p">(</span><span class="n">ObjectModifiedEvent</span><span class="p">(</span><span class="n">tile</span><span class="p">))</span>
+
+        <span class="c"># Get the tile URL, possibly with encoded data</span>
+        <span class="n">IStatusMessage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">addStatusMessage</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s">u&quot;Tile saved&quot;</span><span class="p">,),</span> <span class="nb">type</span><span class="o">=</span><span class="s">u&#39;info&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">tileURL</span><span class="p">)</span>
+</div>
+    <span class="nd">@button.buttonAndHandler</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">u&#39;Cancel&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;cancel&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="DefaultEditForm.handleCancel"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.handleCancel">[docs]</a>    <span class="k">def</span> <span class="nf">handleCancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">tileDataJson</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tileDataJson</span><span class="p">[</span><span class="s">&#39;action&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;cancel&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getURL</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">appendJSONData</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&#39;tiledata&#39;</span><span class="p">,</span> <span class="n">tileDataJson</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DefaultEditForm.updateActions"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditForm.updateActions">[docs]</a>    <span class="k">def</span> <span class="nf">updateActions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DefaultEditForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">updateActions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s">&quot;save&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">addClass</span><span class="p">(</span><span class="s">&quot;context&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s">&quot;cancel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">addClass</span><span class="p">(</span><span class="s">&quot;standalone&quot;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="DefaultEditView"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.edit.DefaultEditView">[docs]</a><span class="k">class</span> <span class="nc">DefaultEditView</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">FormWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This is the default edit view as looked up by the @@edit-tile traveral</span>
+<span class="sd">    view. It is an unnamed adapter on  (context, request, tileType).</span>
+
+<span class="sd">    Note that this is registered in ZCML as a simple &lt;adapter /&gt;, but we</span>
+<span class="sd">    also use the &lt;class /&gt; directive to set up security.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">form</span> <span class="o">=</span> <span class="n">DefaultEditForm</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">ViewPageTemplateFile</span><span class="p">(</span><span class="s">&#39;tileformlayout.pt&#39;</span><span class="p">)</span>
+
+    <span class="c"># Set by sub-path traversal in @@edit-tile - we delegate to the form</span>
+
+    <span class="k">def</span> <span class="nf">__getTileId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form_instance</span><span class="p">,</span> <span class="s">&#39;tileId&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setTileId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form_instance</span><span class="o">.</span><span class="n">tileId</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">tileId</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getTileId</span><span class="p">,</span> <span class="n">__setTileId</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">tileType</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DefaultEditView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span> <span class="o">=</span> <span class="n">tileType</span>
+
+        <span class="c"># Configure the form instance</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form_instance</span><span class="p">,</span> <span class="s">&#39;tileType&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">form_instance</span><span class="o">.</span><span class="n">tileType</span> <span class="o">=</span> <span class="n">tileType</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

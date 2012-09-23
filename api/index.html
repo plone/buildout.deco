@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Complete API and advanced usage &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../index.html" />
+    <link rel="next" title="blocks Package" href="plone.app.blocks.html" />
+    <link rel="prev" title="Advanced Usage" href="../advanced.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.blocks.html" title="blocks Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../advanced.html" title="Advanced Usage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="complete-api-and-advanced-usage">
+<h1>Complete API and advanced usage<a class="headerlink" href="#complete-api-and-advanced-usage" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.blocks.html">blocks Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.layoutbehavior"><tt class="docutils literal"><span class="pre">layoutbehavior</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.panel"><tt class="docutils literal"><span class="pre">panel</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.resource"><tt class="docutils literal"><span class="pre">resource</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.tiles"><tt class="docutils literal"><span class="pre">tiles</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.transform"><tt class="docutils literal"><span class="pre">transform</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.blocks.html#module-plone.app.blocks.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.deco.html">deco Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.deco.html#id1"><tt class="docutils literal"><span class="pre">deco</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.deco.html#module-plone.app.deco.bbb"><tt class="docutils literal"><span class="pre">bbb</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.deco.html#module-plone.app.deco.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.deco.html#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.deco.html#module-plone.app.deco.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.imagetile.html">imagetile Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.imagetile.html#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.imagetile.html#module-plone.app.imagetile.tile"><tt class="docutils literal"><span class="pre">tile</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.imagetile.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.texttile.html">texttile Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.texttile.html#module-plone.app.texttile.tile"><tt class="docutils literal"><span class="pre">tile</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.texttile.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.tiles.html">tiles Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#id1"><tt class="docutils literal"><span class="pre">tiles</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#module-plone.app.tiles.demo"><tt class="docutils literal"><span class="pre">demo</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#module-plone.app.tiles.drafting"><tt class="docutils literal"><span class="pre">drafting</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#module-plone.app.tiles.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#tests-module"><tt class="docutils literal"><span class="pre">tests</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#module-plone.app.tiles.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plone.app.tiles.browser.html">browser Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.add"><tt class="docutils literal"><span class="pre">add</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.base"><tt class="docutils literal"><span class="pre">base</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.edit"><tt class="docutils literal"><span class="pre">edit</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.traversal"><tt class="docutils literal"><span class="pre">traversal</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.tiles.browser.html">browser Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.add"><tt class="docutils literal"><span class="pre">add</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.base"><tt class="docutils literal"><span class="pre">base</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.edit"><tt class="docutils literal"><span class="pre">edit</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.tiles.browser.html#module-plone.app.tiles.browser.traversal"><tt class="docutils literal"><span class="pre">traversal</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.app.toolbar.html">toolbar Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#id1"><tt class="docutils literal"><span class="pre">toolbar</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#module-plone.app.toolbar.bbb"><tt class="docutils literal"><span class="pre">bbb</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#module-plone.app.toolbar.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#module-plone.app.toolbar.toolbar"><tt class="docutils literal"><span class="pre">toolbar</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.app.toolbar.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.directives.html">directives Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.html#id1"><tt class="docutils literal"><span class="pre">directives</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plone.directives.tiles.html">tiles Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plone.directives.tiles.html#id1"><tt class="docutils literal"><span class="pre">tiles</span></tt> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.directives.tiles.html#components-module"><tt class="docutils literal"><span class="pre">components</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.directives.tiles.html#meta-module"><tt class="docutils literal"><span class="pre">meta</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plone.directives.tiles.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="plone.directives.tiles.tests.html">tests Package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="plone.directives.tiles.tests.html#test-grokker-module"><tt class="docutils literal"><span class="pre">test_grokker</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.directives.tiles.html">tiles Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.tiles.html#id1"><tt class="docutils literal"><span class="pre">tiles</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.tiles.html#components-module"><tt class="docutils literal"><span class="pre">components</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.tiles.html#meta-module"><tt class="docutils literal"><span class="pre">meta</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.tiles.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plone.directives.tiles.tests.html">tests Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="plone.directives.tiles.tests.html#test-grokker-module"><tt class="docutils literal"><span class="pre">test_grokker</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.directives.tiles.tests.html">tests Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.directives.tiles.tests.html#test-grokker-module"><tt class="docutils literal"><span class="pre">test_grokker</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plone.tiles.html">tiles Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#id1"><tt class="docutils literal"><span class="pre">tiles</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.absoluteurl"><tt class="docutils literal"><span class="pre">absoluteurl</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.data"><tt class="docutils literal"><span class="pre">data</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.esi"><tt class="docutils literal"><span class="pre">esi</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.fieldtypeconverters"><tt class="docutils literal"><span class="pre">fieldtypeconverters</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.meta"><tt class="docutils literal"><span class="pre">meta</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#tests-module"><tt class="docutils literal"><span class="pre">tests</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.tile"><tt class="docutils literal"><span class="pre">tile</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plone.tiles.html#module-plone.tiles.type"><tt class="docutils literal"><span class="pre">type</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../advanced.html"
+                        title="previous chapter">Advanced Usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plone.app.blocks.html"
+                        title="next chapter">blocks Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.blocks.html" title="blocks Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../advanced.html" title="Advanced Usage"
+             >previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

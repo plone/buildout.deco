@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.tiles.meta &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.tiles.meta</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+
+<span class="kn">from</span> <span class="nn">zope</span> <span class="kn">import</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">zope.configuration.fields</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GlobalObject</span><span class="p">,</span> <span class="n">GlobalInterface</span><span class="p">,</span> <span class="n">MessageID</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">zope.security.zcml</span> <span class="kn">import</span> <span class="n">Permission</span>
+
+<span class="kn">from</span> <span class="nn">zope.configuration.exceptions</span> <span class="kn">import</span> <span class="n">ConfigurationError</span>
+
+<span class="kn">from</span> <span class="nn">zope.publisher.interfaces.browser</span> <span class="kn">import</span> <span class="n">IDefaultBrowserLayer</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileType</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.type</span> <span class="kn">import</span> <span class="n">TileType</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
+
+<span class="kn">from</span> <span class="nn">zope.component.zcml</span> <span class="kn">import</span> <span class="n">utility</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Products.Five.browser.metaconfigure</span> <span class="kn">import</span> <span class="n">page</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">zope.app.publisher.browser.viewmeta</span> <span class="kn">import</span> <span class="n">page</span>
+
+
+<span class="k">class</span> <span class="nc">ITileDirective</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Directive which registers a new type of tile</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">DottedName</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Name&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;A unique, dotted name for the tile&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">MessageID</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Title&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;A user friendly title, used when configuring the tile&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+
+    <span class="n">description</span> <span class="o">=</span> <span class="n">MessageID</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Description&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;A longer summary of the tile&#39;s purpose and function&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+
+    <span class="n">add_permission</span> <span class="o">=</span> <span class="n">Permission</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Add permission&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;Name of the permission required to instantiate this tile&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">GlobalInterface</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Configuration schema for the tile&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;This is used to create standard add/edit forms&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">for_</span> <span class="o">=</span> <span class="n">GlobalObject</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;The interface or class this tile is available for&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">GlobalInterface</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;The layer the tile is available for&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+
+    <span class="n">class_</span> <span class="o">=</span> <span class="n">GlobalObject</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Class&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;Class implementing this tile&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;The name of a template that renders this tile&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;Refers to a file containing a page template&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">permission</span> <span class="o">=</span> <span class="n">Permission</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s">u&quot;View permission&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s">u&quot;Name of the permission required to view this item&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="tile"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.meta.tile">[docs]</a><span class="k">def</span> <span class="nf">tile</span><span class="p">(</span><span class="n">_context</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">add_permission</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">for_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">permission</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements the &lt;plone:tile /&gt; directive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">add_permission</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">add_permission</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s">u&quot;When configuring a new type of tile, &#39;title&#39; and &#39;add_permission&#39; are required&quot;</span><span class="p">)</span>
+
+        <span class="n">type_</span> <span class="o">=</span> <span class="n">TileType</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">add_permission</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+
+        <span class="n">utility</span><span class="p">(</span><span class="n">_context</span><span class="p">,</span> <span class="n">provides</span><span class="o">=</span><span class="n">ITileType</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">type_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">for_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">layer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">class_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">template</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">permission</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">class_</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">template</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s">u&quot;When configuring a tile, &#39;class&#39; or &#39;template&#39; must be given.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">permission</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s">u&quot;When configuring a tile, &#39;permission&#39; is required&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">for_</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">for_</span> <span class="o">=</span> <span class="n">Interface</span>
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">IDefaultBrowserLayer</span>
+
+        <span class="k">if</span> <span class="n">class_</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">class_</span> <span class="o">=</span> <span class="n">Tile</span>
+
+        <span class="n">page</span><span class="p">(</span><span class="n">_context</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">permission</span><span class="o">=</span><span class="n">permission</span><span class="p">,</span> <span class="n">for_</span><span class="o">=</span><span class="n">for_</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+                <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">class_</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,279 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.blocks.transform &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.blocks.transform</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">repoze.xmliter.utils</span> <span class="kn">import</span> <span class="n">getHTMLSerializer</span>
+<span class="kn">from</span> <span class="nn">repoze.xmliter.serializer</span> <span class="kn">import</span> <span class="n">XMLSerializer</span>
+
+<span class="kn">from</span> <span class="nn">plone.transformchain.interfaces</span> <span class="kn">import</span> <span class="n">ITransform</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ESI_HEADER</span>
+
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.blocks</span> <span class="kn">import</span> <span class="n">panel</span><span class="p">,</span> <span class="n">tiles</span>
+<span class="kn">from</span> <span class="nn">plone.tiles</span> <span class="kn">import</span> <span class="n">esi</span>
+
+
+<div class="viewcode-block" id="DisableParsing"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.DisableParsing">[docs]</a><span class="k">class</span> <span class="nc">DisableParsing</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A no-op transform which sets flags to stop plone.app.blocks</span>
+<span class="sd">    transformations. You may register this for a particular published</span>
+<span class="sd">    object or request as required. By default, it&#39;s registered for ESI-</span>
+<span class="sd">    rendered tiles when they are fetched via ESI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITransform</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">8000</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="n">published</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="DisableParsing.transformString"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.DisableParsing.transformString">[docs]</a>    <span class="k">def</span> <span class="nf">transformString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.disabled&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="DisableParsing.transformUnicode"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.DisableParsing.transformUnicode">[docs]</a>    <span class="k">def</span> <span class="nf">transformUnicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.disabled&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="DisableParsing.transformIterable"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.DisableParsing.transformIterable">[docs]</a>    <span class="k">def</span> <span class="nf">transformIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.disabled&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+</div></div>
+<div class="viewcode-block" id="ParseXML"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ParseXML">[docs]</a><span class="k">class</span> <span class="nc">ParseXML</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;First stage in the 8000&#39;s chain: parse the content to an lxml tree</span>
+<span class="sd">    encapsulated in an XMLSerializer.</span>
+
+<span class="sd">    The subsequent steps in this package will assume their result inputs are</span>
+<span class="sd">    XMLSerializer iterables, and do nothing if it is not. This also gives us</span>
+<span class="sd">    the option to parse the content here, and if we decide it&#39;s not HTML,</span>
+<span class="sd">    we can avoid trying to parse it again.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITransform</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">8000</span>
+
+    <span class="c"># Tests set this to True</span>
+    <span class="n">pretty_print</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="n">published</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="ParseXML.transformString"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ParseXML.transformString">[docs]</a>    <span class="k">def</span> <span class="nf">transformString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformIterable</span><span class="p">([</span><span class="n">result</span><span class="p">],</span> <span class="n">encoding</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ParseXML.transformUnicode"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ParseXML.transformUnicode">[docs]</a>    <span class="k">def</span> <span class="nf">transformUnicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformIterable</span><span class="p">([</span><span class="n">result</span><span class="p">],</span> <span class="n">encoding</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ParseXML.transformIterable"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ParseXML.transformIterable">[docs]</a>    <span class="k">def</span> <span class="nf">transformIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.disabled&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">content_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;text/html&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">contentEncoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="s">&#39;Content-Encoding&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">contentEncoding</span> <span class="ow">and</span> <span class="n">contentEncoding</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;zip&#39;</span><span class="p">,</span> <span class="s">&#39;deflate&#39;</span><span class="p">,</span>
+                                                   <span class="s">&#39;compress&#39;</span><span class="p">,):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">getHTMLSerializer</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">,</span>
+                                       <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;plone.app.blocks.enabled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">etree</span><span class="o">.</span><span class="n">ParseError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+</div></div>
+<div class="viewcode-block" id="MergePanels"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.MergePanels">[docs]</a><span class="k">class</span> <span class="nc">MergePanels</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find the site layout and merge panels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITransform</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">8100</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="n">published</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="MergePanels.transformString"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.MergePanels.transformString">[docs]</a>    <span class="k">def</span> <span class="nf">transformString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="MergePanels.transformUnicode"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.MergePanels.transformUnicode">[docs]</a>    <span class="k">def</span> <span class="nf">transformUnicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="MergePanels.transformIterable"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.MergePanels.transformIterable">[docs]</a>    <span class="k">def</span> <span class="nf">transformIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.enabled&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">or</span> \
+           <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">XMLSerializer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tree</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># Set a marker in the request to let subsequent steps know the merging</span>
+        <span class="c"># has happened</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;plone.app.blocks.merged&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+</div></div>
+<div class="viewcode-block" id="IncludeTiles"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.IncludeTiles">[docs]</a><span class="k">class</span> <span class="nc">IncludeTiles</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Turn a panel-merged page into the final composition by including tiles.</span>
+<span class="sd">    Assumes the input result is an lxml tree and returns an lxml tree for</span>
+<span class="sd">    later serialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITransform</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">8500</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="n">published</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="IncludeTiles.transformString"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.IncludeTiles.transformString">[docs]</a>    <span class="k">def</span> <span class="nf">transformString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="IncludeTiles.transformUnicode"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.IncludeTiles.transformUnicode">[docs]</a>    <span class="k">def</span> <span class="nf">transformUnicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="IncludeTiles.transformIterable"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.IncludeTiles.transformIterable">[docs]</a>    <span class="k">def</span> <span class="nf">transformIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;plone.app.blocks.enabled&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">or</span> \
+           <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">XMLSerializer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">tiles</span><span class="o">.</span><span class="n">renderTiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+</div></div>
+<div class="viewcode-block" id="ESIRender"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ESIRender">[docs]</a><span class="k">class</span> <span class="nc">ESIRender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;If ESI rendering was used, render the page down to a format that allows</span>
+<span class="sd">    ESI to work.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITransform</span><span class="p">)</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">8900</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="n">published</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="ESIRender.transformString"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ESIRender.transformString">[docs]</a>    <span class="k">def</span> <span class="nf">transformString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">return</span> <span class="n">esi</span><span class="o">.</span><span class="n">substituteESILinks</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ESIRender.transformUnicode"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ESIRender.transformUnicode">[docs]</a>    <span class="k">def</span> <span class="nf">transformUnicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">return</span> <span class="n">esi</span><span class="o">.</span><span class="n">substituteESILinks</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ESIRender.transformIterable"><a class="viewcode-back" href="../../../../api/plone.app.blocks.html#plone.app.blocks.transform.ESIRender.transformIterable">[docs]</a>    <span class="k">def</span> <span class="nf">transformIterable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">return</span> <span class="n">esi</span><span class="o">.</span><span class="n">substituteESILinks</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

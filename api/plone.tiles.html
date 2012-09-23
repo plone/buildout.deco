@@ -1,0 +1,476 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tiles Package &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Complete API and advanced usage" href="index.html" />
+    <link rel="prev" title="tests Package" href="plone.directives.tiles.tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.directives.tiles.tests.html" title="tests Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tiles-package">
+<h1>tiles Package<a class="headerlink" href="#tiles-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">tiles</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-plone.tiles"></span></div>
+<div class="section" id="module-plone.tiles.absoluteurl">
+<span id="absoluteurl-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">absoluteurl</span></tt> Module<a class="headerlink" href="#module-plone.tiles.absoluteurl" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.absoluteurl.BaseTileAbsoluteURL">
+<em class="property">class </em><tt class="descclassname">plone.tiles.absoluteurl.</tt><tt class="descname">BaseTileAbsoluteURL</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/absoluteurl.html#BaseTileAbsoluteURL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.absoluteurl.BaseTileAbsoluteURL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.traversing.browser.absoluteurl.AbsoluteURL</span></tt></p>
+<p>Convenience base class</p>
+<dl class="method">
+<dt id="plone.tiles.absoluteurl.BaseTileAbsoluteURL.breadcrumbs">
+<tt class="descname">breadcrumbs</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/absoluteurl.html#BaseTileAbsoluteURL.breadcrumbs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.absoluteurl.BaseTileAbsoluteURL.breadcrumbs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.absoluteurl.PersistentTileAbsoluteURL">
+<em class="property">class </em><tt class="descclassname">plone.tiles.absoluteurl.</tt><tt class="descname">PersistentTileAbsoluteURL</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/absoluteurl.html#PersistentTileAbsoluteURL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.absoluteurl.PersistentTileAbsoluteURL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.absoluteurl.BaseTileAbsoluteURL" title="plone.tiles.absoluteurl.BaseTileAbsoluteURL"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.absoluteurl.BaseTileAbsoluteURL</span></tt></a></p>
+<p>Absolute URL for a persitent tile. Includes the tile traverser, but no
+tile data encoded in the query string.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.absoluteurl.TransientTileAbsoluteURL">
+<em class="property">class </em><tt class="descclassname">plone.tiles.absoluteurl.</tt><tt class="descname">TransientTileAbsoluteURL</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/absoluteurl.html#TransientTileAbsoluteURL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.absoluteurl.TransientTileAbsoluteURL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.absoluteurl.BaseTileAbsoluteURL" title="plone.tiles.absoluteurl.BaseTileAbsoluteURL"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.absoluteurl.BaseTileAbsoluteURL</span></tt></a></p>
+<p>Absolute URL for a transient tile. Includes the tile traverser and
+tile data encoded in the query string.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.tiles.data">
+<span id="data-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">data</span></tt> Module<a class="headerlink" href="#module-plone.tiles.data" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.data.PersistentTileDataManager">
+<em class="property">class </em><tt class="descclassname">plone.tiles.data.</tt><tt class="descname">PersistentTileDataManager</tt><big>(</big><em>tile</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#PersistentTileDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.PersistentTileDataManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A data reader for persistent tiles operating on annotatable contexts.
+The data is retrieved from an annotation.</p>
+<dl class="method">
+<dt id="plone.tiles.data.PersistentTileDataManager.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#PersistentTileDataManager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.PersistentTileDataManager.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.data.PersistentTileDataManager.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#PersistentTileDataManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.PersistentTileDataManager.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.data.PersistentTileDataManager.set">
+<tt class="descname">set</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#PersistentTileDataManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.PersistentTileDataManager.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.data.TransientTileDataManager">
+<em class="property">class </em><tt class="descclassname">plone.tiles.data.</tt><tt class="descname">TransientTileDataManager</tt><big>(</big><em>tile</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#TransientTileDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.TransientTileDataManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A data manager for transient tile data, which reads data from the
+request query string.</p>
+<dl class="method">
+<dt id="plone.tiles.data.TransientTileDataManager.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#TransientTileDataManager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.TransientTileDataManager.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.data.TransientTileDataManager.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#TransientTileDataManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.TransientTileDataManager.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.data.TransientTileDataManager.set">
+<tt class="descname">set</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#TransientTileDataManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.TransientTileDataManager.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.tiles.data.decode">
+<tt class="descclassname">plone.tiles.data.</tt><tt class="descname">decode</tt><big>(</big><em>data</em>, <em>schema</em>, <em>missing=True</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a data dict according to a schema. The returned dictionary will
+contain only keys matching schema names, and will force type values
+appropriately.</p>
+<p>This function is only necessary because the encoders used by encode()
+are not sufficiently detailed to always return the exact type expected
+by a field, e.g. resulting in ascii/unicode discrepancies.</p>
+<p>If missing is True, fields that are in the schema but not in the data will
+be set to field.missing_value. Otherwise, they are ignored.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.tiles.data.defaultTileDataContext">
+<tt class="descclassname">plone.tiles.data.</tt><tt class="descname">defaultTileDataContext</tt><big>(</big><em>context</em>, <em>request</em>, <em>tile</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#defaultTileDataContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.defaultTileDataContext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="plone.tiles.data.encode">
+<tt class="descclassname">plone.tiles.data.</tt><tt class="descname">encode</tt><big>(</big><em>data</em>, <em>schema</em>, <em>ignore=()</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/data.html#encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.data.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a data dictionary with key/value pairs and schema, return an
+encoded query string. This is similar to urllib.urlencode(), but field
+names will include the appropriate field type converters, e.g. an int
+field will be encoded as fieldname:int=123. Fields not found in the data
+dict will be ignored, and items in the dict not in the schema will also
+be ignored. Additional fields to ignore can be passed with the &#8216;ignore&#8217;
+parameter. If any fields cannot be converted, a ComponentLookupError
+will be raised.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.tiles.esi">
+<span id="esi-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">esi</span></tt> Module<a class="headerlink" href="#module-plone.tiles.esi" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.esi.ConditionalESIRendering">
+<em class="property">class </em><tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">ConditionalESIRendering</tt><a class="reference internal" href="../_modules/plone/tiles/esi.html#ConditionalESIRendering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ConditionalESIRendering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="plone.tiles.esi.ConditionalESIRendering.head">
+<tt class="descname">head</tt><em class="property"> = False</em><a class="headerlink" href="#plone.tiles.esi.ConditionalESIRendering.head" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.esi.ConditionalESIRendering.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#ConditionalESIRendering.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ConditionalESIRendering.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.esi.ESIBody">
+<em class="property">class </em><tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">ESIBody</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#ESIBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ESIBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Render the head portion of a tile independently.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.esi.ESIHead">
+<em class="property">class </em><tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">ESIHead</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#ESIHead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ESIHead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Render the head portion of a tile independently.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.esi.ESIPersistentTile">
+<em class="property">class </em><tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">ESIPersistentTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#ESIPersistentTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ESIPersistentTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.esi.ConditionalESIRendering" title="plone.tiles.esi.ConditionalESIRendering"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.esi.ConditionalESIRendering</span></tt></a>, <a class="reference internal" href="#plone.tiles.tile.PersistentTile" title="plone.tiles.tile.PersistentTile"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.tile.PersistentTile</span></tt></a></p>
+<p>Convenience class for tiles using ESI rendering.</p>
+<p>Set <tt class="docutils literal"><span class="pre">head</span></tt> to True if this tile renders &lt;head /&gt; content. The
+default is to render &lt;body /&gt; content.</p>
+<dl class="attribute">
+<dt id="plone.tiles.esi.ESIPersistentTile.head">
+<tt class="descname">head</tt><em class="property"> = False</em><a class="headerlink" href="#plone.tiles.esi.ESIPersistentTile.head" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.esi.ESITile">
+<em class="property">class </em><tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">ESITile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#ESITile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.ESITile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.esi.ConditionalESIRendering" title="plone.tiles.esi.ConditionalESIRendering"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.esi.ConditionalESIRendering</span></tt></a>, <a class="reference internal" href="#plone.tiles.tile.Tile" title="plone.tiles.tile.Tile"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.tile.Tile</span></tt></a></p>
+<p>Convenience class for tiles using ESI rendering.</p>
+<p>Set <tt class="docutils literal"><span class="pre">head</span></tt> to True if this tile renders &lt;head /&gt; content. The
+default is to render &lt;body /&gt; content.</p>
+<dl class="attribute">
+<dt id="plone.tiles.esi.ESITile.head">
+<tt class="descname">head</tt><em class="property"> = False</em><a class="headerlink" href="#plone.tiles.esi.ESITile.head" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.tiles.esi.substituteESILinks">
+<tt class="descclassname">plone.tiles.esi.</tt><tt class="descname">substituteESILinks</tt><big>(</big><em>rendered</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/esi.html#substituteESILinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.esi.substituteESILinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn ESI links like &lt;a class=&#8221;_esi_placeholder&#8221; rel=&#8221;esi&#8221; href=&#8221;...&#8221; /&gt;
+into &lt;esi:include /&gt; links.</p>
+<p><tt class="docutils literal"><span class="pre">rendered</span></tt> should be an HTML string.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.tiles.fieldtypeconverters">
+<span id="fieldtypeconverters-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">fieldtypeconverters</span></tt> Module<a class="headerlink" href="#module-plone.tiles.fieldtypeconverters" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.BoolConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">BoolConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#BoolConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.BoolConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.BoolConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'boolean'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.BoolConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.FloatConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">FloatConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#FloatConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.FloatConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.FloatConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'float'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.FloatConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.ListConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">ListConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#ListConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.ListConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.ListConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'list'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.ListConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.LongConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">LongConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#LongConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.LongConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.LongConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'long'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.LongConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.NoConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">NoConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#NoConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.NoConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.NoConverter.token">
+<tt class="descname">token</tt><em class="property"> = None</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.NoConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.TextConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">TextConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#TextConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.TextConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.TextConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'text'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.TextConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.fieldtypeconverters.TupleConverter">
+<em class="property">class </em><tt class="descclassname">plone.tiles.fieldtypeconverters.</tt><tt class="descname">TupleConverter</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/fieldtypeconverters.html#TupleConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.fieldtypeconverters.TupleConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.fieldtypeconverters.NoConverter" title="plone.tiles.fieldtypeconverters.NoConverter"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.fieldtypeconverters.NoConverter</span></tt></a></p>
+<dl class="attribute">
+<dt id="plone.tiles.fieldtypeconverters.TupleConverter.token">
+<tt class="descname">token</tt><em class="property"> = 'tuple'</em><a class="headerlink" href="#plone.tiles.fieldtypeconverters.TupleConverter.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.tiles.interfaces">
+<span id="interfaces-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interfaces</span></tt> Module<a class="headerlink" href="#module-plone.tiles.interfaces" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plone.tiles.meta">
+<span id="meta-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">meta</span></tt> Module<a class="headerlink" href="#module-plone.tiles.meta" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="plone.tiles.meta.tile">
+<tt class="descclassname">plone.tiles.meta.</tt><tt class="descname">tile</tt><big>(</big><em>_context</em>, <em>name</em>, <em>title=None</em>, <em>description=None</em>, <em>add_permission=None</em>, <em>schema=None</em>, <em>for_=None</em>, <em>layer=None</em>, <em>class_=None</em>, <em>template=None</em>, <em>permission=None</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/meta.html#tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.meta.tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements the &lt;plone:tile /&gt; directive</p>
+</dd></dl>
+
+</div>
+<div class="section" id="tests-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">tests</span></tt> Module<a class="headerlink" href="#tests-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plone.tiles.tile">
+<span id="tile-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">tile</span></tt> Module<a class="headerlink" href="#module-plone.tiles.tile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.tile.PersistentTile">
+<em class="property">class </em><tt class="descclassname">plone.tiles.tile.</tt><tt class="descname">PersistentTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/tile.html#PersistentTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.PersistentTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.tiles.tile.Tile" title="plone.tiles.tile.Tile"><tt class="xref py py-class docutils literal"><span class="pre">plone.tiles.tile.Tile</span></tt></a></p>
+<p>Base class for persistent tiles. Identical to <cite>Tile</cite>, except that the
+data dict is never serialized with the URL.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.tiles.tile.Tile">
+<em class="property">class </em><tt class="descclassname">plone.tiles.tile.</tt><tt class="descname">Tile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.Tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.publisher.browser.BrowserView</span></tt></p>
+<p>Basic implementation of a transient tile. Subclasses should override
+__call__ or set an &#8216;index&#8217; variable to point to a view page template file.</p>
+<p>The tile is basically a browser view, with the following enhancements:</p>
+<ul class="simple">
+<li>The attribute <cite>data</cite> can be used to read the tile data, as returned by
+<cite>ITileDataManager(tile).get()</cite>. This value is cached when it is first
+read.</li>
+<li>The attribute <cite>url</cite> can be used to obtain the tile&#8217;s URL, including the
+id specifier and any data associated with a transient tile. Again, the
+return value is cached after the first access.</li>
+<li>The class implements __getitem__() to set the tile id from the traversal
+sub-path, as well as to allow views to be looked up. This is what allows
+a URL like <cite>http://.../&#64;&#64;example.tile/foo</cite> to result in a tile with id
+<cite>foo</cite>.</li>
+</ul>
+<dl class="method">
+<dt id="plone.tiles.tile.Tile.browserDefault">
+<tt class="descname">browserDefault</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/tile.html#Tile.browserDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.Tile.browserDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, tiles render themselves with no browser-default view</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.tiles.tile.Tile.data">
+<tt class="descname">data</tt><a class="reference internal" href="../_modules/plone/tiles/tile.html#Tile.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.Tile.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.tiles.tile.Tile.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#plone.tiles.tile.Tile.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.tiles.tile.Tile.publishTraverse">
+<tt class="descname">publishTraverse</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/tile.html#Tile.publishTraverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.Tile.publishTraverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that publish-traversal uses the same semantics as
+__getitem__.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.tiles.tile.Tile.url">
+<tt class="descname">url</tt><a class="reference internal" href="../_modules/plone/tiles/tile.html#Tile.url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.tile.Tile.url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.tiles.type">
+<span id="type-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">type</span></tt> Module<a class="headerlink" href="#module-plone.tiles.type" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.tiles.type.TileType">
+<em class="property">class </em><tt class="descclassname">plone.tiles.type.</tt><tt class="descname">TileType</tt><big>(</big><em>name</em>, <em>title</em>, <em>add_permission</em>, <em>description=None</em>, <em>schema=None</em><big>)</big><a class="reference internal" href="../_modules/plone/tiles/type.html#TileType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.tiles.type.TileType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A utility that describes a type of tile</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">tiles Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">tiles</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.absoluteurl"><tt class="docutils literal"><span class="pre">absoluteurl</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.data"><tt class="docutils literal"><span class="pre">data</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.esi"><tt class="docutils literal"><span class="pre">esi</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.fieldtypeconverters"><tt class="docutils literal"><span class="pre">fieldtypeconverters</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.meta"><tt class="docutils literal"><span class="pre">meta</span></tt> Module</a></li>
+<li><a class="reference internal" href="#tests-module"><tt class="docutils literal"><span class="pre">tests</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.tile"><tt class="docutils literal"><span class="pre">tile</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.tiles.type"><tt class="docutils literal"><span class="pre">type</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plone.directives.tiles.tests.html"
+                        title="previous chapter">tests Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/plone.tiles.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.directives.tiles.tests.html" title="tests Package"
+             >previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" >Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

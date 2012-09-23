@@ -1,0 +1,313 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.tiles.data &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.tiles.data</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span><span class="p">,</span> <span class="n">implementer</span><span class="p">,</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">adapts</span><span class="p">,</span> <span class="n">adapter</span><span class="p">,</span> <span class="n">queryUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.component.interfaces</span> <span class="kn">import</span> <span class="n">ComponentLookupError</span>
+
+<span class="kn">from</span> <span class="nn">zope.schema</span> <span class="kn">import</span> <span class="n">getFieldsInOrder</span><span class="p">,</span> <span class="n">getFields</span>
+<span class="kn">from</span> <span class="nn">zope.schema.interfaces</span> <span class="kn">import</span> <span class="n">ISequence</span>
+
+<span class="kn">from</span> <span class="nn">zope.annotation.interfaces</span> <span class="kn">import</span> <span class="n">IAnnotations</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileType</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITile</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">IPersistentTile</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileDataManager</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileDataContext</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">IFieldTypeConverter</span>
+
+<span class="kn">from</span> <span class="nn">persistent.dict</span> <span class="kn">import</span> <span class="n">PersistentDict</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+
+
+<span class="n">ANNOTATIONS_KEY_PREFIX</span> <span class="o">=</span> <span class="s">u&#39;plone.tiles.data&#39;</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;plone.tiles&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TransientTileDataManager"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.TransientTileDataManager">[docs]</a><span class="k">class</span> <span class="nc">TransientTileDataManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A data manager for transient tile data, which reads data from the</span>
+<span class="sd">    request query string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITileDataManager</span><span class="p">)</span>
+    <span class="n">adapts</span><span class="p">(</span><span class="n">ITile</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span> <span class="o">=</span> <span class="n">queryUtility</span><span class="p">(</span><span class="n">ITileType</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">tile</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+
+        <span class="c"># try to use a &#39;_tiledata&#39; parameter in the request, falling</span>
+        <span class="c"># back to the request.form object itself if not found</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">request</span>
+
+        <span class="k">if</span> <span class="s">&#39;_tiledata&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;_tiledata&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span>
+
+<div class="viewcode-block" id="TransientTileDataManager.get"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.TransientTileDataManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># If we don&#39;t have a schema, just take the request</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">schema</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c"># Try to decode the form data properly if we can</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">UnicodeDecodeError</span><span class="p">,):</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">u&quot;Could not convert form data to schema&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TransientTileDataManager.set"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.TransientTileDataManager.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TransientTileDataManager.delete"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.TransientTileDataManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="PersistentTileDataManager"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.PersistentTileDataManager">[docs]</a><span class="k">class</span> <span class="nc">PersistentTileDataManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A data reader for persistent tiles operating on annotatable contexts.</span>
+<span class="sd">    The data is retrieved from an annotation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITileDataManager</span><span class="p">)</span>
+    <span class="n">adapts</span><span class="p">(</span><span class="n">IPersistentTile</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span> <span class="o">=</span> <span class="n">queryUtility</span><span class="p">(</span><span class="n">ITileType</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">tile</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">tile</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">tile</span><span class="p">),</span> <span class="n">ITileDataContext</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">IAnnotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ANNOTATIONS_KEY_PREFIX</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">id</span><span class="p">,)</span>
+
+<div class="viewcode-block" id="PersistentTileDataManager.get"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.PersistentTileDataManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">getFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">missing_value</span>
+        <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="PersistentTileDataManager.set"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.PersistentTileDataManager.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">PersistentDict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PersistentTileDataManager.delete"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.PersistentTileDataManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+
+</div></div>
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">ITileDataContext</span><span class="p">)</span>
+<span class="nd">@adapter</span><span class="p">(</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Interface</span><span class="p">,</span> <span class="n">ITile</span><span class="p">)</span>
+<div class="viewcode-block" id="defaultTileDataContext"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.defaultTileDataContext">[docs]</a><span class="k">def</span> <span class="nf">defaultTileDataContext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">context</span>
+
+<span class="c"># Encoding</span>
+
+</div>
+<div class="viewcode-block" id="encode"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.encode">[docs]</a><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">()):</span>
+    <span class="sd">&quot;&quot;&quot;Given a data dictionary with key/value pairs and schema, return an</span>
+<span class="sd">    encoded query string. This is similar to urllib.urlencode(), but field</span>
+<span class="sd">    names will include the appropriate field type converters, e.g. an int</span>
+<span class="sd">    field will be encoded as fieldname:int=123. Fields not found in the data</span>
+<span class="sd">    dict will be ignored, and items in the dict not in the schema will also</span>
+<span class="sd">    be ignored. Additional fields to ignore can be passed with the &#39;ignore&#39;</span>
+<span class="sd">    parameter. If any fields cannot be converted, a ComponentLookupError</span>
+<span class="sd">    will be raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">encode</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">getFieldsInOrder</span><span class="p">(</span><span class="n">schema</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ignore</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">converter</span> <span class="o">=</span> <span class="n">IFieldTypeConverter</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">converter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ComponentLookupError</span><span class="p">(</span><span class="s">u&quot;Cannot URL encode </span><span class="si">%s</span><span class="s"> of type </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">__class__</span><span class="p">,))</span>
+
+        <span class="n">encoded_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">converter</span><span class="o">.</span><span class="n">token</span><span class="p">:</span>
+            <span class="n">encoded_name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">converter</span><span class="o">.</span><span class="n">token</span><span class="p">,)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">ISequence</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+            <span class="n">value_type_converter</span> <span class="o">=</span> <span class="n">IFieldTypeConverter</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value_type</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value_type_converter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ComponentLookupError</span><span class="p">(</span><span class="s">u&quot;Cannot URL encode value type for </span><span class="si">%s</span><span class="s"> of type </span><span class="si">%s</span><span class="s"> : </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">value_type</span><span class="o">.</span><span class="n">__class__</span><span class="p">,))</span>
+
+            <span class="k">if</span> <span class="n">value_type_converter</span><span class="o">.</span><span class="n">token</span><span class="p">:</span>
+                <span class="n">encoded_name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value_type_converter</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="n">converter</span><span class="o">.</span><span class="n">token</span><span class="p">,)</span>
+
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">item</span> <span class="ow">and</span> <span class="s">&#39;1&#39;</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+
+                <span class="n">encode</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">encoded_name</span><span class="p">,</span> <span class="n">item</span><span class="p">,))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># The :bool converter just does bool() value, but urlencode() does</span>
+            <span class="c"># str() on the object. The result is False =&gt; &#39;False&#39; =&gt; True :(</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="ow">and</span> <span class="s">&#39;1&#39;</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+
+            <span class="n">encode</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">encoded_name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">encode</span><span class="p">)</span>
+
+
+<span class="c"># Decoding</span>
+</div>
+<div class="viewcode-block" id="decode"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.data.decode">[docs]</a><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decode a data dict according to a schema. The returned dictionary will</span>
+<span class="sd">    contain only keys matching schema names, and will force type values</span>
+<span class="sd">    appropriately.</span>
+
+<span class="sd">    This function is only necessary because the encoders used by encode()</span>
+<span class="sd">    are not sufficiently detailed to always return the exact type expected</span>
+<span class="sd">    by a field, e.g. resulting in ascii/unicode discrepancies.</span>
+
+<span class="sd">    If missing is True, fields that are in the schema but not in the data will</span>
+<span class="sd">    be set to field.missing_value. Otherwise, they are ignored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">decoded</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">getFields</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+                <span class="n">decoded</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">missing_value</span>
+            <span class="k">continue</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">field_type</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">_type</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_type</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,)):</span>
+            <span class="n">field_type</span> <span class="o">=</span> <span class="n">field_type</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">ISequence</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+            <span class="n">converted</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">value_type_field_type</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">value_type</span><span class="o">.</span><span class="n">_type</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value_type_field_type</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,)):</span>
+                <span class="n">value_type_field_type</span> <span class="o">=</span> <span class="n">value_type_field_type</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">value_type</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">value_type_field_type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="n">converted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+            <span class="n">value</span> <span class="o">=</span> <span class="n">converted</span>
+
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">_type</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">field_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">decoded</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">return</span> <span class="n">decoded</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

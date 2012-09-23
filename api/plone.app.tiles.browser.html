@@ -1,0 +1,538 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>browser Package &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Complete API and advanced usage" href="index.html" />
+    <link rel="next" title="toolbar Package" href="plone.app.toolbar.html" />
+    <link rel="prev" title="browser Package" href="" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.toolbar.html" title="toolbar Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="#" title="browser Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="browser-package">
+<h1>browser Package<a class="headerlink" href="#browser-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-plone.app.tiles.browser.add">
+<span id="add-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">add</span></tt> Module<a class="headerlink" href="#module-plone.app.tiles.browser.add" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.add.</tt><tt class="descname">DefaultAddForm</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.tiles.browser.base.TileForm" title="plone.app.tiles.browser.base.TileForm"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.tiles.browser.base.TileForm</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">z3c.form.form.Form</span></tt></p>
+<p>Standard tile add form, which is wrapped by DefaultAddView (see below).</p>
+<p>This form is capable of rendering the fields of any tile schema as defined
+by an ITileType utility.</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.buttons">
+<tt class="descname">buttons</tt><em class="property"> = &lt;z3c.form.button.Buttons object at 0x4777810&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.buttons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.handleAdd">
+<tt class="descname">handleAdd</tt><em class="property"> = &lt;Handler for &lt;Button 'save' u'Save'&gt;&gt;</em><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddForm.handleAdd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.handleAdd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.handleCancel">
+<tt class="descname">handleCancel</tt><em class="property"> = &lt;Handler for &lt;Button 'cancel' u'Cancel'&gt;&gt;</em><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddForm.handleCancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.handleCancel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.handlers">
+<tt class="descname">handlers</tt><em class="property"> = &lt;Handlers [&lt;Handler for &lt;Button 'save' u'Save'&gt;&gt;, &lt;Handler for &lt;Button 'cancel' u'Cancel'&gt;&gt;]&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.ignoreContext">
+<tt class="descname">ignoreContext</tt><em class="property"> = True</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.ignoreContext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.label">
+<tt class="descname">label</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddForm.label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.name">
+<tt class="descname">name</tt><em class="property"> = 'add_tile'</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.tileId">
+<tt class="descname">tileId</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.tileType">
+<tt class="descname">tileType</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.tileType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.add.DefaultAddForm.updateActions">
+<tt class="descname">updateActions</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddForm.updateActions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddForm.updateActions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.add.DefaultAddView">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.add.</tt><tt class="descname">DefaultAddView</tt><big>(</big><em>context</em>, <em>request</em>, <em>tileType</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/add.html#DefaultAddView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">plone.z3cform.layout.FormWrapper</span></tt></p>
+<p>This is the default add view as looked up by the &#64;&#64;add-tile traversal
+view. It is an unnamed adapter on  (context, request, tileType).</p>
+<p>Note that this is registered in ZCML as a simple &lt;adapter /&gt;, but we
+also use the &lt;class /&gt; directive to set up security.</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddView.form">
+<tt class="descname">form</tt><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddView.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#plone.app.tiles.browser.add.DefaultAddForm" title="plone.app.tiles.browser.add.DefaultAddForm"><tt class="xref py py-class docutils literal"><span class="pre">DefaultAddForm</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddView.index">
+<tt class="descname">index</tt><em class="property"> = &lt;BoundPageTemplateFile of None&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddView.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.add.DefaultAddView.tileId">
+<tt class="descname">tileId</tt><a class="headerlink" href="#plone.app.tiles.browser.add.DefaultAddView.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.tiles.browser.base">
+<span id="base-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">base</span></tt> Module<a class="headerlink" href="#module-plone.app.tiles.browser.base" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.tiles.browser.base.TileForm">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.base.</tt><tt class="descname">TileForm</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">plone.autoform.form.AutoExtensibleForm</span></tt></p>
+<p>Mixin class for tile add/edit forms, which will load the tile schema
+and set up an appropriate form.</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.additionalSchemata">
+<tt class="descname">additionalSchemata</tt><em class="property"> = ()</em><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.additionalSchemata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.autoGroups">
+<tt class="descname">autoGroups</tt><em class="property"> = True</em><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.autoGroups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.description">
+<tt class="descname">description</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.prefix">
+<tt class="descname">prefix</tt><em class="property"> = ''</em><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.base.TileForm.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.schema">
+<tt class="descname">schema</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm.schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.tileId">
+<tt class="descname">tileId</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileForm.tileType">
+<tt class="descname">tileType</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.tileType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.base.TileForm.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.base.TileForm.updateWidgets">
+<tt class="descname">updateWidgets</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileForm.updateWidgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileForm.updateWidgets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.base.TileFormLayout">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.base.</tt><tt class="descname">TileFormLayout</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileFormLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileFormLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Layout view giving access to macro slots</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.base.TileFormLayout.macros">
+<tt class="descname">macros</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/base.html#TileFormLayout.macros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.base.TileFormLayout.macros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.tiles.browser.edit">
+<span id="edit-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">edit</span></tt> Module<a class="headerlink" href="#module-plone.app.tiles.browser.edit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.edit.</tt><tt class="descname">DefaultEditForm</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.tiles.browser.base.TileForm" title="plone.app.tiles.browser.base.TileForm"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.tiles.browser.base.TileForm</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">z3c.form.form.Form</span></tt></p>
+<p>Standard tile edit form, which is wrapped by DefaultEditView (see
+below).</p>
+<p>This form is capable of rendering the fields of any tile schema as defined
+by an ITileType utility.</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.buttons">
+<tt class="descname">buttons</tt><em class="property"> = &lt;z3c.form.button.Buttons object at 0x492e410&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.buttons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.getContent">
+<tt class="descname">getContent</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.getContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.getContent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.handleCancel">
+<tt class="descname">handleCancel</tt><em class="property"> = &lt;Handler for &lt;Button 'cancel' u'Cancel'&gt;&gt;</em><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.handleCancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.handleCancel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.handleSave">
+<tt class="descname">handleSave</tt><em class="property"> = &lt;Handler for &lt;Button 'save' u'Save'&gt;&gt;</em><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.handleSave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.handleSave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.handlers">
+<tt class="descname">handlers</tt><em class="property"> = &lt;Handlers [&lt;Handler for &lt;Button 'save' u'Save'&gt;&gt;, &lt;Handler for &lt;Button 'cancel' u'Cancel'&gt;&gt;]&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.ignoreContext">
+<tt class="descname">ignoreContext</tt><em class="property"> = False</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.ignoreContext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.ignoreRequest">
+<tt class="descname">ignoreRequest</tt><em class="property"> = True</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.ignoreRequest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.label">
+<tt class="descname">label</tt><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.name">
+<tt class="descname">name</tt><em class="property"> = 'edit_tile'</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.tileId">
+<tt class="descname">tileId</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.tileType">
+<tt class="descname">tileType</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.tileType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.edit.DefaultEditForm.updateActions">
+<tt class="descname">updateActions</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditForm.updateActions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditForm.updateActions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.edit.DefaultEditView">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.edit.</tt><tt class="descname">DefaultEditView</tt><big>(</big><em>context</em>, <em>request</em>, <em>tileType</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/edit.html#DefaultEditView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">plone.z3cform.layout.FormWrapper</span></tt></p>
+<p>This is the default edit view as looked up by the &#64;&#64;edit-tile traveral
+view. It is an unnamed adapter on  (context, request, tileType).</p>
+<p>Note that this is registered in ZCML as a simple &lt;adapter /&gt;, but we
+also use the &lt;class /&gt; directive to set up security.</p>
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditView.form">
+<tt class="descname">form</tt><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditView.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#plone.app.tiles.browser.edit.DefaultEditForm" title="plone.app.tiles.browser.edit.DefaultEditForm"><tt class="xref py py-class docutils literal"><span class="pre">DefaultEditForm</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditView.index">
+<tt class="descname">index</tt><em class="property"> = &lt;BoundPageTemplateFile of None&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditView.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.edit.DefaultEditView.tileId">
+<tt class="descname">tileId</tt><a class="headerlink" href="#plone.app.tiles.browser.edit.DefaultEditView.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.tiles.browser.traversal">
+<span id="traversal-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">traversal</span></tt> Module<a class="headerlink" href="#module-plone.app.tiles.browser.traversal" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.tiles.browser.traversal.AddTile">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.traversal.</tt><tt class="descname">AddTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#AddTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.AddTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.tiles.browser.traversal.TileTraverser" title="plone.app.tiles.browser.traversal.TileTraverser"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.tiles.browser.traversal.TileTraverser</span></tt></a></p>
+<p>Implements the &#64;&#64;add-tile traversal view</p>
+<p>Rendering this view on its own will display a template where the user
+may choose a tile type to add.</p>
+<p>Traversing to /path/to/obj/&#64;&#64;add-tile/tile-name will:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Look up the tile info for &#8216;tile-name&#8217; as a named utility</p>
+</li>
+<li><dl class="first docutils">
+<dt>Attempt to find view which is an adapter for (context, request,</dt>
+<dd><p class="first last">tile_info) with the name &#8216;tile-name&#8217;</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Fall back on the unnamed adapter of the same triple</p>
+</li>
+<li><p class="first">Return above found view for rendering</p>
+</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.AddTile.publishTraverse">
+<tt class="descname">publishTraverse</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#AddTile.publishTraverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.AddTile.publishTraverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow traversal to &#64;&#64;&lt;view&gt;/tilename</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.traversal.AddTile.targetInterface">
+<tt class="descname">targetInterface</tt><em class="property"> = &lt;InterfaceClass plone.app.tiles.interfaces.ITileAddView&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.traversal.AddTile.targetInterface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.AddTile.tileSortKey">
+<tt class="descname">tileSortKey</tt><big>(</big><em>type1</em>, <em>type2</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#AddTile.tileSortKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.AddTile.tileSortKey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.AddTile.tileTypes">
+<tt class="descname">tileTypes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#AddTile.tileTypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.AddTile.tileTypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.traversal.DeleteTile">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.traversal.</tt><tt class="descname">DeleteTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#DeleteTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.DeleteTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.tiles.browser.traversal.TileTraverser" title="plone.app.tiles.browser.traversal.TileTraverser"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.tiles.browser.traversal.TileTraverser</span></tt></a></p>
+<p>Implements the &#64;&#64;delete-tile traversal view</p>
+<p>Traversing to /path/to/obj/&#64;&#64;delete-tile will list all tiles.
+Traversing to /path/to/obj/&#64;&#64;delete-tile/tile-id will delete tile.</p>
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.DeleteTile.publishTraverse">
+<tt class="descname">publishTraverse</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#DeleteTile.publishTraverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.DeleteTile.publishTraverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow traversal to &#64;&#64;delete-tile/tilename</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.traversal.DeleteTile.tileId">
+<tt class="descname">tileId</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.traversal.DeleteTile.tileId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.DeleteTile.tiles">
+<tt class="descname">tiles</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#DeleteTile.tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.DeleteTile.tiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.traversal.EditTile">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.traversal.</tt><tt class="descname">EditTile</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#EditTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.EditTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.tiles.browser.traversal.TileTraverser" title="plone.app.tiles.browser.traversal.TileTraverser"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.tiles.browser.traversal.TileTraverser</span></tt></a></p>
+<p>Implements the &#64;&#64;edit-tile namespace.</p>
+<p>Traversing to /path/to/obj/&#64;&#64;edit-tile/tile-name/tile-id will:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Look up the tile info for &#8216;tile-name&#8217; as a named utility</p>
+</li>
+<li><dl class="first docutils">
+<dt>Attempt to find an adapter for (context, request, tile_info) with</dt>
+<dd><p class="first last">the name &#8216;tile-name&#8217;</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Fall back on the unnamed adapter of the same triple</p>
+</li>
+<li><p class="first">Set the &#8216;tileId&#8217; property on the view to the id &#8216;tile-id</p>
+</li>
+<li><p class="first">Return the view for rendering</p>
+</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.EditTile.publishTraverse">
+<tt class="descname">publishTraverse</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#EditTile.publishTraverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.EditTile.publishTraverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow traversal to &#64;&#64;&lt;view&gt;/tilename/tileid</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.traversal.EditTile.targetInterface">
+<tt class="descname">targetInterface</tt><em class="property"> = &lt;InterfaceClass plone.app.tiles.interfaces.ITileEditView&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.traversal.EditTile.targetInterface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.tiles.browser.traversal.TileTraverser">
+<em class="property">class </em><tt class="descclassname">plone.app.tiles.browser.traversal.</tt><tt class="descname">TileTraverser</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#TileTraverser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.TileTraverser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for tile add/edit view traversers.</p>
+<p>Below, we register two traversal views: <tt class="docutils literal"><span class="pre">&#64;&#64;add-tile</span></tt> and
+<tt class="docutils literal"><span class="pre">&#64;&#64;edit-tile</span></tt>.</p>
+<dl class="method">
+<dt id="plone.app.tiles.browser.traversal.TileTraverser.getTileViewByName">
+<tt class="descname">getTileViewByName</tt><big>(</big><em>tile_name</em><big>)</big><a class="reference internal" href="../_modules/plone/app/tiles/browser/traversal.html#TileTraverser.getTileViewByName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.tiles.browser.traversal.TileTraverser.getTileViewByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>We look up for adapter from <tt class="docutils literal"><span class="pre">(context,</span> <span class="pre">request,</span> <span class="pre">tileType)</span></tt> to an
+appropriate interface. The default is to use the unnamed adapter, but
+this can be overridden by registering a named adapter with the name of
+the tile type. This way, a custom add/edit view can be reigstered for
+a particular type of tile.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.traversal.TileTraverser.targetInterface">
+<tt class="descname">targetInterface</tt><em class="property"> = &lt;InterfaceClass zope.interface.Interface&gt;</em><a class="headerlink" href="#plone.app.tiles.browser.traversal.TileTraverser.targetInterface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.tiles.browser.traversal.TileTraverser.view">
+<tt class="descname">view</tt><em class="property"> = None</em><a class="headerlink" href="#plone.app.tiles.browser.traversal.TileTraverser.view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">browser Package</a><ul>
+<li><a class="reference internal" href="#module-plone.app.tiles.browser.add"><tt class="docutils literal"><span class="pre">add</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.tiles.browser.base"><tt class="docutils literal"><span class="pre">base</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.tiles.browser.edit"><tt class="docutils literal"><span class="pre">edit</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.tiles.browser.traversal"><tt class="docutils literal"><span class="pre">traversal</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href=""
+                        title="previous chapter">browser Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plone.app.toolbar.html"
+                        title="next chapter">toolbar Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/plone.app.tiles.browser.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.toolbar.html" title="toolbar Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="#" title="browser Package"
+             >previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" >Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

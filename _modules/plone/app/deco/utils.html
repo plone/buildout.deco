@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.deco.utils &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.deco.utils</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">queryUtility</span><span class="p">,</span> <span class="n">getMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">zope.schema.interfaces</span> <span class="kn">import</span> <span class="n">IField</span>
+
+<span class="kn">from</span> <span class="nn">zope.security.interfaces</span> <span class="kn">import</span> <span class="n">IPermission</span>
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">getSecurityManager</span>
+
+<span class="kn">from</span> <span class="nn">z3c.form.interfaces</span> <span class="kn">import</span> <span class="n">IEditForm</span><span class="p">,</span> <span class="n">IFieldWidget</span><span class="p">,</span> <span class="n">DISPLAY_MODE</span><span class="p">,</span> \
+                                <span class="n">HIDDEN_MODE</span>
+<span class="kn">from</span> <span class="nn">plone.supermodel.utils</span> <span class="kn">import</span> <span class="n">mergedTaggedValueDict</span>
+<span class="kn">from</span> <span class="nn">plone.autoform.interfaces</span> <span class="kn">import</span> <span class="n">OMITTED_KEY</span><span class="p">,</span> <span class="n">WIDGETS_KEY</span><span class="p">,</span> <span class="n">MODES_KEY</span>
+<span class="kn">from</span> <span class="nn">plone.autoform.interfaces</span> <span class="kn">import</span> <span class="n">READ_PERMISSIONS_KEY</span><span class="p">,</span> \
+                                      <span class="n">WRITE_PERMISSIONS_KEY</span>
+<span class="kn">from</span> <span class="nn">plone.autoform.utils</span> <span class="kn">import</span> <span class="n">mergedTaggedValuesForIRO</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.blocks.interfaces</span> <span class="kn">import</span> <span class="n">IOmittedField</span>
+
+
+<div class="viewcode-block" id="PermissionChecker"><a class="viewcode-back" href="../../../../api/plone.app.deco.html#plone.app.deco.utils.PermissionChecker">[docs]</a><span class="k">class</span> <span class="nc">PermissionChecker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">permissions</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">permissions</span> <span class="o">=</span> <span class="n">permissions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sm</span> <span class="o">=</span> <span class="n">getSecurityManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="PermissionChecker.allowed"><a class="viewcode-back" href="../../../../api/plone.app.deco.html#plone.app.deco.utils.PermissionChecker.allowed">[docs]</a>    <span class="k">def</span> <span class="nf">allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="n">permission_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">permission_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">permission_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
+                <span class="n">permission</span> <span class="o">=</span> <span class="n">queryUtility</span><span class="p">(</span><span class="n">IPermission</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">permission_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">permission</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">permission_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">permission_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">checkPermission</span><span class="p">(</span><span class="n">permission</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">permission_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+</div></div>
+<span class="k">def</span> <span class="nf">_getWidgetName</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">widgets</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">in</span> <span class="n">widgets</span><span class="p">:</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">widgets</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="n">field</span><span class="p">,</span> <span class="n">request</span><span class="p">),</span> <span class="n">IFieldWidget</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">factory</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">__class__</span>
+    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">factory</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">factory</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="isVisible"><a class="viewcode-back" href="../../../../api/plone.app.deco.html#plone.app.deco.utils.isVisible">[docs]</a><span class="k">def</span> <span class="nf">isVisible</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">omitted</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">omitted</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">==</span> <span class="s">&#39;false&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="extractFieldInformation"><a class="viewcode-back" href="../../../../api/plone.app.deco.html#plone.app.deco.utils.extractFieldInformation">[docs]</a><span class="k">def</span> <span class="nf">extractFieldInformation</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="n">iro</span> <span class="o">=</span> <span class="p">[</span><span class="n">IEditForm</span><span class="p">,</span> <span class="n">Interface</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="n">prefix</span> <span class="o">+=</span> <span class="s">&#39;-&#39;</span>
+    <span class="n">omitted</span> <span class="o">=</span> <span class="n">mergedTaggedValuesForIRO</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">OMITTED_KEY</span><span class="p">,</span> <span class="n">iro</span><span class="p">)</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="n">mergedTaggedValuesForIRO</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">MODES_KEY</span><span class="p">,</span> <span class="n">iro</span><span class="p">)</span>
+    <span class="n">widgets</span> <span class="o">=</span> <span class="n">mergedTaggedValueDict</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">WIDGETS_KEY</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">read_permissionchecker</span> <span class="o">=</span> <span class="n">PermissionChecker</span><span class="p">(</span>
+            <span class="n">mergedTaggedValueDict</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">READ_PERMISSIONS_KEY</span><span class="p">),</span>
+            <span class="n">context</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">write_permissionchecker</span> <span class="o">=</span> <span class="n">PermissionChecker</span><span class="p">(</span>
+            <span class="n">mergedTaggedValueDict</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">WRITE_PERMISSIONS_KEY</span><span class="p">),</span>
+            <span class="n">context</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">read_only</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">HIDDEN_MODE</span><span class="p">:</span>
+            <span class="n">omitted</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">DISPLAY_MODE</span><span class="p">:</span>
+            <span class="n">read_only</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">read_permissionchecker</span><span class="o">.</span><span class="n">allowed</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">omitted</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write_permissionchecker</span><span class="o">.</span><span class="n">allowed</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">read_only</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">isVisible</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">omitted</span><span class="p">):</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">IField</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">IOmittedField</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">{</span>
+                    <span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">__identifier__</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+                    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">schema</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                    <span class="s">&#39;widget&#39;</span><span class="p">:</span> <span class="n">_getWidgetName</span><span class="p">(</span><span class="n">schema</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">widgets</span><span class="p">,</span> <span class="n">request</span><span class="p">),</span>
+                    <span class="s">&#39;readonly&#39;</span><span class="p">:</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">read_only</span><span class="p">,</span>
+                <span class="p">}</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

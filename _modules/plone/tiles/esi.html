@@ -1,0 +1,222 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.tiles.esi &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.tiles.esi</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">IESIRendered</span><span class="p">,</span> <span class="n">ESI_HEADER</span><span class="p">,</span> <span class="n">ESI_HEADER_KEY</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.tile</span> <span class="kn">import</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">PersistentTile</span>
+
+<span class="n">HEAD_CHILDREN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;&lt;head[^&gt;]*&gt;(.*)&lt;/head&gt;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
+<span class="n">BODY_CHILDREN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;&lt;body[^&gt;]*&gt;(.*)&lt;/body&gt;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">ESI_NAMESPACE_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;esi&#39;</span><span class="p">:</span> <span class="s">&#39;http://www.edge-delivery.org/esi/1.0&#39;</span><span class="p">}</span>
+<span class="n">ESI_TEMPLATE</span> <span class="o">=</span> <span class="s">u&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
+<span class="s">    &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+<span class="s">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span>
+<span class="s">    &lt;body&gt;</span>
+<span class="s">        &lt;a class=&quot;_esi_placeholder&quot; rel=&quot;esi&quot; href=&quot;</span><span class="si">%(url)s</span><span class="s">/@@</span><span class="si">%(esiMode)s</span><span class="s">?</span><span class="si">%(queryString)s</span><span class="s">&quot;&gt;&lt;/a&gt;</span>
+<span class="s">    &lt;/body&gt;</span>
+<span class="s">&lt;/html&gt;</span>
+<span class="s">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="substituteESILinks"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.substituteESILinks">[docs]</a><span class="k">def</span> <span class="nf">substituteESILinks</span><span class="p">(</span><span class="n">rendered</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Turn ESI links like &lt;a class=&quot;_esi_placeholder&quot; rel=&quot;esi&quot; href=&quot;...&quot; /&gt;</span>
+<span class="sd">    into &lt;esi:include /&gt; links.</span>
+
+<span class="sd">    ``rendered`` should be an HTML string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rendered</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;&lt;html&#39;</span><span class="p">,</span>
+                      <span class="s">&#39;&lt;html xmlns:esi=&quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">ESI_NAMESPACE_MAP</span><span class="p">[</span><span class="s">&#39;esi&#39;</span><span class="p">],</span>
+                      <span class="n">rendered</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;&lt;a class=&quot;_esi_placeholder&quot; rel=&quot;esi&quot; href=&quot;([^&quot;]+)&quot;&gt;&lt;/a&gt;&#39;</span><span class="p">,</span>
+                  <span class="s">r&#39;&lt;esi:include src=&quot;\1&quot; /&gt;&#39;</span><span class="p">,</span> <span class="n">rendered</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ConditionalESIRendering"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ConditionalESIRendering">[docs]</a><span class="k">class</span> <span class="nc">ConditionalESIRendering</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="ConditionalESIRendering.render"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ConditionalESIRendering.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="bp">NotImplemented</span><span class="p">(</span><span class="s">u&quot;Override render() or set a class variable &#39;index&#39; to point to a view page template file&quot;</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;esi-body&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">:</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;esi-head&#39;</span>
+            <span class="k">return</span> <span class="n">ESI_TEMPLATE</span> <span class="o">%</span> <span class="p">{</span>
+                    <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getURL</span><span class="p">(),</span>
+                    <span class="s">&#39;queryString&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;QUERY_STRING&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s">&#39;esiMode&#39;</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;index&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+
+<span class="c"># Convenience base classes</span>
+</div>
+<div class="viewcode-block" id="ESITile"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ESITile">[docs]</a><span class="k">class</span> <span class="nc">ESITile</span><span class="p">(</span><span class="n">ConditionalESIRendering</span><span class="p">,</span> <span class="n">Tile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convenience class for tiles using ESI rendering.</span>
+
+<span class="sd">    Set ``head`` to True if this tile renders &lt;head /&gt; content. The</span>
+<span class="sd">    default is to render &lt;body /&gt; content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">IESIRendered</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="bp">False</span>
+
+</div>
+<div class="viewcode-block" id="ESIPersistentTile"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ESIPersistentTile">[docs]</a><span class="k">class</span> <span class="nc">ESIPersistentTile</span><span class="p">(</span><span class="n">ConditionalESIRendering</span><span class="p">,</span> <span class="n">PersistentTile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convenience class for tiles using ESI rendering.</span>
+
+<span class="sd">    Set ``head`` to True if this tile renders &lt;head /&gt; content. The</span>
+<span class="sd">    default is to render &lt;body /&gt; content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">IESIRendered</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<span class="c"># ESI views</span>
+</div>
+<div class="viewcode-block" id="ESIHead"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ESIHead">[docs]</a><span class="k">class</span> <span class="nc">ESIHead</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Render the head portion of a tile independently.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the children of the &lt;head&gt; tag as a fragment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">):</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">ESI_HEADER_KEY</span><span class="p">]</span>
+
+        <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="p">()</span>  <span class="c"># render the tile</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">HEAD_CHILDREN</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">document</span>
+        <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="ESIBody"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.esi.ESIBody">[docs]</a><span class="k">class</span> <span class="nc">ESIBody</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Render the head portion of a tile independently.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the children of the &lt;head&gt; tag as a fragment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getHeader</span><span class="p">(</span><span class="n">ESI_HEADER</span><span class="p">):</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">ESI_HEADER_KEY</span><span class="p">]</span>
+
+        <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="p">()</span>  <span class="c"># render the tile</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">BODY_CHILDREN</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">document</span>
+        <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

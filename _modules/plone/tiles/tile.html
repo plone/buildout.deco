@@ -1,0 +1,194 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.tiles.tile &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.tiles.tile</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">queryMultiAdapter</span>
+
+<span class="kn">from</span> <span class="nn">zope.publisher.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+<span class="kn">from</span> <span class="nn">zope.traversing.browser.absoluteurl</span> <span class="kn">import</span> <span class="n">absoluteURL</span>
+
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITile</span><span class="p">,</span> <span class="n">IPersistentTile</span>
+<span class="kn">from</span> <span class="nn">plone.tiles.interfaces</span> <span class="kn">import</span> <span class="n">ITileDataManager</span>
+
+
+<div class="viewcode-block" id="Tile"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.Tile">[docs]</a><span class="k">class</span> <span class="nc">Tile</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic implementation of a transient tile. Subclasses should override</span>
+<span class="sd">    __call__ or set an &#39;index&#39; variable to point to a view page template file.</span>
+
+<span class="sd">    The tile is basically a browser view, with the following enhancements:</span>
+
+<span class="sd">    * The attribute `data` can be used to read the tile data, as returned by</span>
+<span class="sd">      `ITileDataManager(tile).get()`. This value is cached when it is first</span>
+<span class="sd">      read.</span>
+<span class="sd">    * The attribute `url` can be used to obtain the tile&#39;s URL, including the</span>
+<span class="sd">      id specifier and any data associated with a transient tile. Again, the</span>
+<span class="sd">      return value is cached after the first access.</span>
+<span class="sd">    * The class implements __getitem__() to set the tile id from the traversal</span>
+<span class="sd">      sub-path, as well as to allow views to be looked up. This is what allows</span>
+<span class="sd">      a URL like `http://.../@@example.tile/foo` to result in a tile with id</span>
+<span class="sd">      `foo`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITile</span><span class="p">)</span>
+
+    <span class="n">__cachedData</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">__cachedURL</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+
+        <span class="c"># If we haven&#39;t set the id yet, do that first</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">name</span>
+
+            <span class="c"># This is pretty stupid, but it&#39;s required to keep the ZPublisher</span>
+            <span class="c"># happy in Zope 2. It doesn&#39;t normally check for docstrings on</span>
+            <span class="c"># views, but it does check for them on sub-objects obtained via</span>
+            <span class="c"># __getitem__.</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;For Zope 2, to keep the ZPublisher happy&quot;</span>
+
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="c"># Also allow views on tiles even without @@.</span>
+        <span class="n">viewName</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">viewName</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;@@&#39;</span><span class="p">):</span>
+            <span class="n">viewName</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">queryMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">viewName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">view</span><span class="o">.</span><span class="n">__parent__</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="n">view</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="n">viewName</span>
+            <span class="k">return</span> <span class="n">view</span>
+
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tile.browserDefault"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.Tile.browserDefault">[docs]</a>    <span class="k">def</span> <span class="nf">browserDefault</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;By default, tiles render themselves with no browser-default view</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">,</span> <span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Tile.publishTraverse"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.Tile.publishTraverse">[docs]</a>    <span class="k">def</span> <span class="nf">publishTraverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ensure that publish-traversal uses the same semantics as</span>
+<span class="sd">        __getitem__.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;index&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="bp">NotImplemented</span><span class="p">(</span><span class="s">u&quot;Override __call__ or set a class &quot;</span> <span class="o">+</span> \
+                    <span class="s">&quot;variable &#39;index&#39; to point to a view page template file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="s">&#39;X-Tile-Url&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Tile.data"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.Tile.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cachedData</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">reader</span> <span class="o">=</span> <span class="n">ITileDataManager</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cachedData</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cachedData</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Tile.url"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.Tile.url">[docs]</a>    <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">absoluteURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="PersistentTile"><a class="viewcode-back" href="../../../api/plone.tiles.html#plone.tiles.tile.PersistentTile">[docs]</a><span class="k">class</span> <span class="nc">PersistentTile</span><span class="p">(</span><span class="n">Tile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for persistent tiles. Identical to `Tile`, except that the</span>
+<span class="sd">    data dict is never serialized with the URL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">IPersistentTile</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

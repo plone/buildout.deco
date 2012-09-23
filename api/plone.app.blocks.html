@@ -1,0 +1,459 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>blocks Package &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Complete API and advanced usage" href="index.html" />
+    <link rel="next" title="deco Package" href="plone.app.deco.html" />
+    <link rel="prev" title="Complete API and advanced usage" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.deco.html" title="deco Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Complete API and advanced usage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="blocks-package">
+<h1>blocks Package<a class="headerlink" href="#blocks-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-plone.app.blocks.interfaces">
+<span id="interfaces-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interfaces</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.interfaces" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plone.app.blocks.layoutbehavior">
+<span id="layoutbehavior-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">layoutbehavior</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.layoutbehavior" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.blocks.layoutbehavior.LayoutField">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.layoutbehavior.</tt><tt class="descname">LayoutField</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/layoutbehavior.html#LayoutField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.layoutbehavior.LayoutField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.schema._bootstrapfields.Text</span></tt></p>
+<p>A field used to store layout information</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.blocks.panel">
+<span id="panel-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">panel</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.panel" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="plone.app.blocks.panel.merge">
+<tt class="descclassname">plone.app.blocks.panel.</tt><tt class="descname">merge</tt><big>(</big><em>request</em>, <em>pageTree</em>, <em>removePanelLinks=False</em>, <em>removeLayoutLink=True</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/panel.html#merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.panel.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform panel merging for the given page.</p>
+<p>Returns None if the page has no layout.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.blocks.resource">
+<span id="resource-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">resource</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.resource" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.blocks.resource.AvailableLayoutsVocabulary">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">AvailableLayoutsVocabulary</tt><big>(</big><em>format</em>, <em>defaultFilename</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#AvailableLayoutsVocabulary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.AvailableLayoutsVocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Vocabulary to return available layouts of a given type</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.resource.DefaultSiteLayout">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">DefaultSiteLayout</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#DefaultSiteLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.DefaultSiteLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">zope.publisher.browser.BrowserView</span></tt></p>
+<p>Look up and render the site layout to use for the context.</p>
+<p>Use this for a page that does not have the ILayout behavior, or a
+standalone page template.</p>
+<p>The idea is that you can do:</p>
+<blockquote>
+<div>&lt;html data-layout=&#8221;./&#64;&#64;default-site-layout&#8221;&gt;</div></blockquote>
+<p>and always get the correct site layout for the page, taking section-
+specific settings into account.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.resource.PageSiteLayout">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">PageSiteLayout</tt><big>(</big><em>context</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#PageSiteLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.PageSiteLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#plone.app.blocks.resource.DefaultSiteLayout" title="plone.app.blocks.resource.DefaultSiteLayout"><tt class="xref py py-class docutils literal"><span class="pre">plone.app.blocks.resource.DefaultSiteLayout</span></tt></a></p>
+<p>Look up and render the site layout to use for the context.</p>
+<p>Use this for a page that does have the ILayout behavior. It will take the
+<tt class="docutils literal"><span class="pre">pageSiteLayout</span></tt> property into account.</p>
+<p>The idea is that you can do:</p>
+<blockquote>
+<div>&lt;html data-layout=&#8221;./&#64;&#64;page-site-layout&#8221;&gt;</div></blockquote>
+<p>and always get the correct site layout for the page, taking section-
+and page-specific settings into account.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.resource.SiteLayoutTraverser">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">SiteLayoutTraverser</tt><big>(</big><em>context</em>, <em>request=None</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#SiteLayoutTraverser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.SiteLayoutTraverser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">plone.resource.traversal.ResourceTraverser</span></tt></p>
+<p>The site layout traverser.</p>
+<p>Allows traveral to /++sitelayout++&lt;name&gt; using <tt class="docutils literal"><span class="pre">plone.resource</span></tt> to fetch
+things stored either on the filesystem or in the ZODB.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.resource.SiteLayoutTraverser.name">
+<tt class="descname">name</tt><em class="property"> = 'sitelayout'</em><a class="headerlink" href="#plone.app.blocks.resource.SiteLayoutTraverser.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.resource.cacheKey">
+<tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">cacheKey</tt><big>(</big><em>method</em>, <em>self</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#cacheKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.cacheKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate if the fti is modified, the global registry is modified,
+or the content is modified</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.resource.globalSiteLayoutModified">
+<tt class="descclassname">plone.app.blocks.resource.</tt><tt class="descname">globalSiteLayoutModified</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/resource.html#globalSiteLayoutModified"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.resource.globalSiteLayoutModified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate caches if the global site layout is changed. This will
+likely also affect things cached using plone.app.caching, which is what
+we want - the page has probably changed</p>
+</dd></dl>
+
+</div>
+<div class="section" id="testing-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">testing</span></tt> Module<a class="headerlink" href="#testing-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plone.app.blocks.tiles">
+<span id="tiles-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">tiles</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.tiles" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="plone.app.blocks.tiles.renderTiles">
+<tt class="descclassname">plone.app.blocks.tiles.</tt><tt class="descname">renderTiles</tt><big>(</big><em>request</em>, <em>tree</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/tiles.html#renderTiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.tiles.renderTiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all tiles in the given response, contained in the lxml element
+tree <cite>tree</cite>, and insert them into the ouput.</p>
+<p>Assumes panel merging has already happened.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.blocks.transform">
+<span id="transform-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">transform</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.transform" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plone.app.blocks.transform.DisableParsing">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.transform.</tt><tt class="descname">DisableParsing</tt><big>(</big><em>published</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#DisableParsing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.DisableParsing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A no-op transform which sets flags to stop plone.app.blocks
+transformations. You may register this for a particular published
+object or request as required. By default, it&#8217;s registered for ESI-
+rendered tiles when they are fetched via ESI.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.DisableParsing.order">
+<tt class="descname">order</tt><em class="property"> = 8000</em><a class="headerlink" href="#plone.app.blocks.transform.DisableParsing.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.DisableParsing.transformIterable">
+<tt class="descname">transformIterable</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#DisableParsing.transformIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.DisableParsing.transformIterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.DisableParsing.transformString">
+<tt class="descname">transformString</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#DisableParsing.transformString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.DisableParsing.transformString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.DisableParsing.transformUnicode">
+<tt class="descname">transformUnicode</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#DisableParsing.transformUnicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.DisableParsing.transformUnicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.transform.ESIRender">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.transform.</tt><tt class="descname">ESIRender</tt><big>(</big><em>published</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ESIRender"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ESIRender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>If ESI rendering was used, render the page down to a format that allows
+ESI to work.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.ESIRender.order">
+<tt class="descname">order</tt><em class="property"> = 8900</em><a class="headerlink" href="#plone.app.blocks.transform.ESIRender.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ESIRender.transformIterable">
+<tt class="descname">transformIterable</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ESIRender.transformIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ESIRender.transformIterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ESIRender.transformString">
+<tt class="descname">transformString</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ESIRender.transformString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ESIRender.transformString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ESIRender.transformUnicode">
+<tt class="descname">transformUnicode</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ESIRender.transformUnicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ESIRender.transformUnicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.transform.IncludeTiles">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.transform.</tt><tt class="descname">IncludeTiles</tt><big>(</big><em>published</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#IncludeTiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.IncludeTiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Turn a panel-merged page into the final composition by including tiles.
+Assumes the input result is an lxml tree and returns an lxml tree for
+later serialization.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.IncludeTiles.order">
+<tt class="descname">order</tt><em class="property"> = 8500</em><a class="headerlink" href="#plone.app.blocks.transform.IncludeTiles.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.IncludeTiles.transformIterable">
+<tt class="descname">transformIterable</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#IncludeTiles.transformIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.IncludeTiles.transformIterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.IncludeTiles.transformString">
+<tt class="descname">transformString</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#IncludeTiles.transformString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.IncludeTiles.transformString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.IncludeTiles.transformUnicode">
+<tt class="descname">transformUnicode</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#IncludeTiles.transformUnicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.IncludeTiles.transformUnicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.transform.MergePanels">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.transform.</tt><tt class="descname">MergePanels</tt><big>(</big><em>published</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#MergePanels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.MergePanels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Find the site layout and merge panels.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.MergePanels.order">
+<tt class="descname">order</tt><em class="property"> = 8100</em><a class="headerlink" href="#plone.app.blocks.transform.MergePanels.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.MergePanels.transformIterable">
+<tt class="descname">transformIterable</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#MergePanels.transformIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.MergePanels.transformIterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.MergePanels.transformString">
+<tt class="descname">transformString</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#MergePanels.transformString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.MergePanels.transformString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.MergePanels.transformUnicode">
+<tt class="descname">transformUnicode</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#MergePanels.transformUnicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.MergePanels.transformUnicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plone.app.blocks.transform.ParseXML">
+<em class="property">class </em><tt class="descclassname">plone.app.blocks.transform.</tt><tt class="descname">ParseXML</tt><big>(</big><em>published</em>, <em>request</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ParseXML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ParseXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>First stage in the 8000&#8217;s chain: parse the content to an lxml tree
+encapsulated in an XMLSerializer.</p>
+<p>The subsequent steps in this package will assume their result inputs are
+XMLSerializer iterables, and do nothing if it is not. This also gives us
+the option to parse the content here, and if we decide it&#8217;s not HTML,
+we can avoid trying to parse it again.</p>
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.ParseXML.order">
+<tt class="descname">order</tt><em class="property"> = 8000</em><a class="headerlink" href="#plone.app.blocks.transform.ParseXML.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="plone.app.blocks.transform.ParseXML.pretty_print">
+<tt class="descname">pretty_print</tt><em class="property"> = False</em><a class="headerlink" href="#plone.app.blocks.transform.ParseXML.pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ParseXML.transformIterable">
+<tt class="descname">transformIterable</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ParseXML.transformIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ParseXML.transformIterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ParseXML.transformString">
+<tt class="descname">transformString</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ParseXML.transformString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ParseXML.transformString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="plone.app.blocks.transform.ParseXML.transformUnicode">
+<tt class="descname">transformUnicode</tt><big>(</big><em>result</em>, <em>encoding</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/transform.html#ParseXML.transformUnicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.transform.ParseXML.transformUnicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-plone.app.blocks.utils">
+<span id="utils-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">utils</span></tt> Module<a class="headerlink" href="#module-plone.app.blocks.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="plone.app.blocks.utils.append_tail">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">append_tail</tt><big>(</big><em>element</em>, <em>text</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#append_tail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.append_tail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.append_text">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">append_text</tt><big>(</big><em>element</em>, <em>text</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#append_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.append_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.extractCharset">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">extractCharset</tt><big>(</big><em>response</em>, <em>default='utf-8'</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#extractCharset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.extractCharset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the charset of the given response</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.getDefaultSiteLayout">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">getDefaultSiteLayout</tt><big>(</big><em>context</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#getDefaultSiteLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.getDefaultSiteLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path to the site layout to use by default for the given content
+object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.getLayoutAwareSiteLayout">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">getLayoutAwareSiteLayout</tt><big>(</big><em>context</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#getLayoutAwareSiteLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.getLayoutAwareSiteLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path to the site layout for a page. This is generally only
+appropriate for the view of this page. For a generic template or view, use
+getDefaultSiteLayout(context) instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.replace_content">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">replace_content</tt><big>(</big><em>element</em>, <em>wrapper</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#replace_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.replace_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to above but keeps parent tag</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.replace_with_children">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">replace_with_children</tt><big>(</big><em>element</em>, <em>wrapper</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#replace_with_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.replace_with_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>element.replace also replaces the tail and forgets the wrapper.text</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.resolve">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">resolve</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve the given URL to an lxml tree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.resolveResource">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">resolveResource</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#resolveResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.resolveResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve the given URL to a unicode string. If the URL is an absolute
+path, it will be made relative to the Plone site root.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plone.app.blocks.utils.xpath1">
+<tt class="descclassname">plone.app.blocks.utils.</tt><tt class="descname">xpath1</tt><big>(</big><em>xpath</em>, <em>node</em>, <em>strict=True</em><big>)</big><a class="reference internal" href="../_modules/plone/app/blocks/utils.html#xpath1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#plone.app.blocks.utils.xpath1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a single node matched by the given etree.XPath object.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">blocks Package</a><ul>
+<li><a class="reference internal" href="#module-plone.app.blocks.interfaces"><tt class="docutils literal"><span class="pre">interfaces</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.layoutbehavior"><tt class="docutils literal"><span class="pre">layoutbehavior</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.panel"><tt class="docutils literal"><span class="pre">panel</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.resource"><tt class="docutils literal"><span class="pre">resource</span></tt> Module</a></li>
+<li><a class="reference internal" href="#testing-module"><tt class="docutils literal"><span class="pre">testing</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.tiles"><tt class="docutils literal"><span class="pre">tiles</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.transform"><tt class="docutils literal"><span class="pre">transform</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-plone.app.blocks.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Complete API and advanced usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plone.app.deco.html"
+                        title="next chapter">deco Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/plone.app.blocks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plone.app.deco.html" title="deco Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Complete API and advanced usage"
+             >previous</a> |</li>
+        <li><a href="../index.html">Deco</a> &raquo;</li>
+          <li><a href="index.html" >Complete API and advanced usage</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

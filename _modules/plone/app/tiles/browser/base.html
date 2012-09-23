@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plone.app.tiles.browser.base &mdash; Deco 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="Deco 1.0 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for plone.app.tiles.browser.base</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">getMultiAdapter</span>
+<span class="kn">from</span> <span class="nn">zope.security</span> <span class="kn">import</span> <span class="n">checkPermission</span>
+
+<span class="kn">from</span> <span class="nn">AccessControl</span> <span class="kn">import</span> <span class="n">Unauthorized</span>
+
+<span class="kn">from</span> <span class="nn">z3c.form.interfaces</span> <span class="kn">import</span> <span class="n">IWidgets</span>
+<span class="kn">from</span> <span class="nn">plone.autoform.form</span> <span class="kn">import</span> <span class="n">AutoExtensibleForm</span>
+<span class="kn">from</span> <span class="nn">plone.z3cform.interfaces</span> <span class="kn">import</span> <span class="n">IDeferSecurityCheck</span>
+
+<span class="kn">from</span> <span class="nn">plone.app.drafts.interfaces</span> <span class="kn">import</span> <span class="n">ICurrentDraftManagement</span>
+
+
+<div class="viewcode-block" id="TileFormLayout"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileFormLayout">[docs]</a><span class="k">class</span> <span class="nc">TileFormLayout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Layout view giving access to macro slots</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="TileFormLayout.macros"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileFormLayout.macros">[docs]</a>    <span class="k">def</span> <span class="nf">macros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">macros</span>
+
+</div></div>
+<div class="viewcode-block" id="TileForm"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm">[docs]</a><span class="k">class</span> <span class="nc">TileForm</span><span class="p">(</span><span class="n">AutoExtensibleForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mixin class for tile add/edit forms, which will load the tile schema</span>
+<span class="sd">    and set up an appropriate form.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Must be set by subclass</span>
+    <span class="n">tileType</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">tileId</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c"># Get fieldets if subclass sets additional_schemata</span>
+    <span class="n">autoGroups</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="c"># We don&#39;t want the tile edit screens to use a form prefix, so that we</span>
+    <span class="c"># can pass simple things on the edit screen and have them be interpreted</span>
+    <span class="c"># by transient tiles</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+<div class="viewcode-block" id="TileForm.update"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># Set up draft information if required</span>
+        <span class="n">currentDraft</span> <span class="o">=</span> <span class="n">ICurrentDraftManagement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">currentDraft</span><span class="o">.</span><span class="n">mark</span><span class="p">()</span>
+
+        <span class="c"># Override to check the tile add/edit permission</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">IDeferSecurityCheck</span><span class="o">.</span><span class="n">providedBy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">checkPermission</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">add_permission</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">Unauthorized</span><span class="p">(</span>
+                    <span class="s">&quot;You are not allowed to add this kind of tile&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">TileForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TileForm.render"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">301</span><span class="p">,</span> <span class="mi">302</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TileForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TileForm.updateWidgets"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm.updateWidgets">[docs]</a>    <span class="k">def</span> <span class="nf">updateWidgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Override to set the widgets prefix before widgets are updated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span> <span class="o">=</span> <span class="n">getMultiAdapter</span><span class="p">((</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">getContent</span><span class="p">()),</span>
+            <span class="n">IWidgets</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">ignoreContext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignoreContext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">ignoreRequest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignoreRequest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">ignoreReadonly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignoreReadonly</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="TileForm.description"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">description</span>
+
+    <span class="c"># AutoExtensibleForm contract</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="TileForm.schema"><a class="viewcode-back" href="../../../../../api/plone.app.tiles.browser.html#plone.app.tiles.browser.base.TileForm.schema">[docs]</a>    <span class="k">def</span> <span class="nf">schema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileType</span><span class="o">.</span><span class="n">schema</span>
+</div>
+    <span class="n">additionalSchemata</span> <span class="o">=</span> <span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">Deco</a> &raquo;</li>
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Plone Foundation.
+      Last updated on Sep 23, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
