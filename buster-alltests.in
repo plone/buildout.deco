@@ -52,20 +52,10 @@ def main():
         # Run the tests
         options = [option.strip() for option in """${options}""".split()
                    if option.strip()]
-        eggs = [egg.strip() for egg in """${eggs}""".split() if egg.strip()]
         output = """${stdout}""".strip()
         if output and not os.path.isdir(output):
             os.makedirs(output)
         failures = []
-        for egg in eggs:
-            logger.info(
-                'Looking for buster.js tests in %s' % egg)
-            egg_dir = os.path.join('src', egg)
-            for dirpath, dirnames, filenames in os.walk(os.path.join(
-                'src', egg)):
-                for filename in filenames:
-                    if filename != 'buster.js':
-                        continue
                     stdout = sys.stdout
                     if output:
                         result = dirpath[len(egg_dir):].strip('/').replace(
