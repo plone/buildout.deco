@@ -5,6 +5,7 @@ import os
 import contextlib
 import subprocess
 import logging
+import pprint
 
 logger = logging.getLogger('buster-alltests')
 
@@ -52,6 +53,7 @@ def main():
         output = """${stdout}""".strip()
         if output and not os.path.isdir(output):
             os.makedirs(output)
+        failures = []
         for egg in eggs:
             logger.info(
                 'Lookinf for buster.js tests in %s' % egg)
@@ -68,12 +70,22 @@ def main():
                         stdout = open(os.path.join(output, result), 'w')
                     logger.info(
                         'Running buster.js tests in %s' % dirpath)
-                    subprocess.call(
+                    retcode = subprocess.call(
                         [os.path.join('bin', 'buster-test')] + options
                         + ['--config', os.path.join(dirpath, filename)],
                         stdout=stdout)
+                    if retcode:
+                        failures.append(dirpath)
+                        logger.error(
+                            'Failures in %s buster.js tests' % dirpath)
                     break
+
+        return failures
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    main()
+    failures = main()
+    if failures:
+        sys.exit('The following tests failed:\n%s' % 
+                 '\n'.join(failures))
+        
