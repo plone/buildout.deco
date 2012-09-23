@@ -18,6 +18,7 @@ Table of content
     :maxdepth: 1
 
     advanced
+    deco_readme
 
 Indices and tables
 ==================
