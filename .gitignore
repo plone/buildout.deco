@@ -7,9 +7,7 @@
 
 /bin/
 /develop-eggs/
-/docs/_build/doctrees/
-/docs/_build/Makefile
-/docs/_build/make.bat
+/docs/_build/
 /eggs/
 /lib/
 /include/
