@@ -5,6 +5,7 @@ extends =
 #    deco-2.0.cfg
 #    toolbar-1.0.cfg
 #    toolbar-2.0.cfg
+#    pybot.cfg
 
 #[instance]
 #eggs +=
