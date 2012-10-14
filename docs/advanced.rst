@@ -15,7 +15,7 @@ back, how deco/toolbar is applied to the page:
     - `plone.app.tiles`:
     - `plone.app.contentlistingtile`:
     - `plone.app.imagetile`:
-    - `plone.app.contenttile`:
+    - `plone.app.contenttile`: button to add content view on page
     - `plone.app.texttile`:
     - `plone.app.layoutpage`:
     - `plone.app.registry`: used for storing etc... (included in Plone 4.2)
