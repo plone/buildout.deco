@@ -1,12 +1,15 @@
 [buildout]
-# only uncomment one
 extends =
-#    deco-1.0.cfg
-#    deco-2.0.cfg
-#    toolbar-1.0.cfg
-#    toolbar-2.0.cfg
+
+# only uncomment one to bootstrap environment for one of the subprojects
+#    tiles.cfg
+#    deco.cfg
+#    cmsui.cfg
+
+# if you want Plone site to be automaticaly created for you
 #    initial-site.cfg
 
+# add development tools that you might need to develop with
 #[instance]
 #eggs +=
 #    iw.debug

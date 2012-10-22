@@ -36,38 +36,37 @@ Running Tests
 TODO: need to write this section once we have tests running again.
 
 
+Generating Documentation
+========================
+
+TODO: write it
+
+
 Configurations
 ==============
 
 In ``buildout.cfg`` you can select one of the configurations described below:
 
-- ``toolbar-1.0.cfg``
+- ``tiles.cfg``
 
-  This is setup for `plone.app.toolbar`_ version 1.0, which replaces old green
-  editing toolbar with Twitter Bootstrap like toolbar. Although toolbar is
-  rendered inside iframe all links - when clicked - will open in top frame.
+  This is setup for `plone.app.toolbar`_ version 1.0 without deco, but with
+  `plone.app.standardtiles`_ also enabled. This should make it possible to ca
 
-- ``toolbar-2.0.cfg``
+- ``deco.cfg``
 
-  This is setup for `plone.app.toolbar`_ version 2.0, which builds upon
-  version 1.0 and opens toolbar links inside overlay which is placed inside
-  iframe. This should give us separation of backend and frontend theming.
+  This setup extends ``toolbar.cfg`` and adds `plone.app.deco`_ to it. Installs
+  also `plone.app.layoutpage`_ which is a dexterity content type with layout
+  behaviour enabled. This should be a starting point to start development of
+  Deco.
 
-- ``deco-1.0.cfg``
+- ``cmsui.cfg``
 
-  This is setup for `plone.app.deco`_ version 1.0 also known as Deco Lite.
-  Intention of Deco Lite is to bring Deco idea closer to current Plone 4 user
-  experience and not so radically change the way Plone is being used.
-
-- ``deco-2.0.cfg``
-
-  This is setup for `plone.app.deco`_ version 2.0. Difference from 1.0 version
-  is that it includes `plone.app.toolbar`_ version 2.0 which includes CMSUI
-  functionality. This is also setup which you can use to develop both on
-  toolbar and deco.
+  This setup extends ``toolbar.cfg`` and uses `plone.app.toolbar`_ version 2.0
+  which should open overlays for every action/button in toolbar.
 
 
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
+.. _`plone.app.layoutpage`: https://github.com/plone/plone.app.layoutpage
 .. _`plone.app.toolbar github issues`: https://github.com/plone/plone.app.toolbar/issues
 .. _`plone.app.deco`: https://github.com/plone/plone.app.deco
 .. _`plone.app.deco github issues`: https://github.com/plone/plone.app.deco/issues
