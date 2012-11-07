@@ -2,7 +2,8 @@
 extends =
 
 # only uncomment one to bootstrap environment for one of the subprojects
-#    tiles.cfg
+#    toolbar.cfg
+#    standardtiles.cfg
 #    deco.cfg
 #    cmsui.cfg
 
