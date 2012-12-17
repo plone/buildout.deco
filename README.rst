@@ -47,10 +47,14 @@ Configurations
 
 In ``buildout.cfg`` you can select one of the configurations described below:
 
-- ``tiles.cfg``
+- ``widgets.cfg``
+  TODO: description
 
-  This is setup for `plone.app.toolbar`_ version 1.0 without deco, but with
-  `plone.app.standardtiles`_ also enabled. This should make it possible to ca
+- ``toolbar.cfg``
+  TODO: description
+
+- ``standardtiles.cfg``
+  TODO: description
 
 - ``deco.cfg``
 
@@ -59,12 +63,8 @@ In ``buildout.cfg`` you can select one of the configurations described below:
   behaviour enabled. This should be a starting point to start development of
   Deco.
 
-- ``cmsui.cfg``
 
-  This setup extends ``toolbar.cfg`` and uses `plone.app.toolbar`_ version 2.0
-  which should open overlays for every action/button in toolbar.
-
-
+.. _`plone.app.widgets`: https://github.com/plone/plone.app.widgets
 .. _`plone.app.toolbar`: https://github.com/plone/plone.app.toolbar
 .. _`plone.app.layoutpage`: https://github.com/plone/plone.app.layoutpage
 .. _`plone.app.toolbar github issues`: https://github.com/plone/plone.app.toolbar/issues

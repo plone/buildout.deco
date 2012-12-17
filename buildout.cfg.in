@@ -2,10 +2,10 @@
 extends =
 
 # only uncomment one to bootstrap environment for one of the subprojects
+#    widgets.cfg
 #    toolbar.cfg
 #    standardtiles.cfg
 #    deco.cfg
-#    cmsui.cfg
 
 # if you want Plone site to be automaticaly created for you
 #    initial-site.cfg
@@ -13,5 +13,6 @@ extends =
 # add development tools that you might need to develop with
 #[instance]
 #eggs +=
+#    Products.PrintingMailHost
 #    iw.debug
 #    plone.reload
