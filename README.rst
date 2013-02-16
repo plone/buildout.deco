@@ -1,6 +1,21 @@
-Development buildout for `plone.app.deco`_ and `plone.app.toolbar`_.
+TODO: what this buildout is for and how projects relate
+
+Development buildout for `plone.app.widgets`_, `plone.app.toolbar`_,
+`plone.app.standardtiles`_ and `plone.app.deco`_.
 
 .. contents::
+
+.. image:: https://travis-ci.org/plone/buildout.deco.png?branch=master
+
+
+Reportinga bugs 
+===============
+
+- toolbar/cmsui related bugs should be reported to `plone.app.toolbar github
+  issues`_
+
+- deco related related bugs should be reported to `plone.app.deco github
+  issues`_
 
 Bootstrapping
 =============
@@ -21,19 +36,11 @@ You now have all required packages for development checked out via git into
 ``src/``.
 
 
-Reportinga bugs 
-===============
-
-- toolbar/cmsui related bugs should be reported to `plone.app.toolbar github
-  issues`_
-
-- deco related related bugs should be reported to `plone.app.deco github
-  issues`_
-
 Running Tests
 =============
 
 TODO: need to write this section once we have tests running again.
+
 
 
 Generating Documentation
