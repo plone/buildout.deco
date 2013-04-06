@@ -4,7 +4,7 @@ all: bootstrap
 	bin/buildout
 
 bootstrap:
-	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix -I /home/rok/dev/nixos
+	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix
 	./nixenv/bin/virtualenv --distribute --clear .
 	echo ../../../nixenv/lib/python2.7/site-packages > lib/python2.7/site-packages/nixenv.pth
 	./bin/easy_install -H "" zc.buildout
