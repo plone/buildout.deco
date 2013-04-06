@@ -4,6 +4,7 @@
 /.pydevproject
 /buildout.cfg
 /tags
+/nixenv
 
 /bin/
 /develop-eggs/
