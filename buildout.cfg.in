@@ -10,9 +10,17 @@ extends =
 # if you want Plone site to be automaticaly created for you
 #    initial-site.cfg
 
+# If you want omelette, uncomment here and down there
+# parts =
+#     omelette
+
 # add development tools that you might need to develop with
 #[instance]
 #eggs +=
 #    Products.PrintingMailHost
 #    iw.debug
 #    plone.reload
+
+# [omelette]
+# recipe = collective.recipe.omelette
+# eggs = ${instance:eggs}
