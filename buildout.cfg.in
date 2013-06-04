@@ -11,7 +11,7 @@ extends =
 #    initial-site.cfg
 
 # If you want omelette, uncomment here and down there
-# parts =
+# parts +=
 #     omelette
 
 # add development tools that you might need to develop with
