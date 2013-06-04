@@ -10,6 +10,8 @@ buildEnv {
   name = "deco-env";
   paths = [
     python27
+    tk
+    wxPython
     #python27Packages.ipdb
     #python27Packages.ipython
     python27Packages.distribute
