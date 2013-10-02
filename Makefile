@@ -8,8 +8,6 @@ bootstrap:
 	./nixenv/bin/virtualenv --distribute --clear .
 	echo ../../../nixenv/lib/python2.7/site-packages > lib/python2.7/site-packages/nixenv.pth
 	./bin/easy_install -H "" zc.buildout
-	#./bin/easy_install -H "" ipdb
-	#./bin/easy_install -H "" ipython
 
 test:
 	bin/test
