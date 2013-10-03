@@ -9,11 +9,10 @@ with pkgs;
 buildEnv {
   name = "buildout-deco-env";
   paths = [
-    python27Full
-    python27Packages.distribute
-    python27Packages.recursivePthLoader
+    python27
     python27Packages.virtualenv
+    python27Packages.recursivePthLoader
     python27Packages."zc.buildout-1.7.1"
     python27Packages."Plone-4.3.2"
-  ];
+  ] ++ lib.attrValues python27.modules;
 }
